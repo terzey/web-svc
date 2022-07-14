@@ -12,7 +12,6 @@ RUN  cd /tmp && \
      npm install --production && \
      mv /tmp/node_modules /app
 
-
 FROM node:16-alpine
 LABEL Description="Hello Nest.js!"
 
