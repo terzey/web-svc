@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.app.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.app.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-{{ .Values.app.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-{{ .Values.app.name }}
+    spec:
+      containers:
+        - name: {{ .Release.Name }}-{{ .Values.app.name }}
+          imagePullPolicy: IfNotPresent
+          image: {{ .Values.app.image }}
+          resources:
+            requests:
+              memory: {{ .Values.app.limits.memory }}
+              cpu: {{ .Values.app.limits.cpu }}
+            limits:
+              memory: {{ .Values.app.limits.memory }}
+              cpu: {{ .Values.app.limits.cpu }}
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet:
+              port: 3000
+              path: /self/health/readiness
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            failureThreshold: 3
+            timeoutSeconds: 1
+          livenessProbe:
+            httpGet:
+              port: 3000
+              path: /self/health/liveness
+            initialDelaySeconds: 3
+            periodSeconds: 30
+            failureThreshold: 3
+            timeoutSeconds: 1
+          startupProbe:
+            httpGet:
+              port: 3000
+              path: /self/health/startup
+            failureThreshold: 120
+            periodSeconds: 1
+            initialDelaySeconds: 1
+            timeoutSeconds: 1
+          env:
+            - name: MEMORY_LIMIT_MB
+              valueFrom:
+                resourceFieldRef:
+                  containerName: {{ .Release.Name }}-{{ .Values.app.name }}
+                  resource: limits.memory
+                  divisor: 1Mi
+            - name: MEMORY_THRESHOLD_PERCENT
+              value: "{{ .Values.app.check.readiness.memoryPercentThreshold }}"

@@ -12,7 +12,7 @@ import { LoggerModule } from './logger/logger.module';
   imports: [
     ConfigModule,
     HealthModule,
-    PrometheusModule.register({ path: '/metrics' }),
+    PrometheusModule.register({ path: '/self/metrics' }),
     LoggerModule,
   ],
   controllers: [AppController],

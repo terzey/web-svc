@@ -3,7 +3,7 @@ import { HealthCheck } from '@nestjs/terminus';
 import { Request } from 'express';
 import { HealthService } from './health.service';
 
-@Controller('health')
+@Controller('/self/health')
 export class HealthController {
   constructor(private healthService: HealthService) {}
 

@@ -10,7 +10,7 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Get('version')
+  @Get('/self/version')
   getVersion(): IVersion {
     return this.appService.getVersion();
   }

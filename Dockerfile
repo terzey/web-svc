@@ -20,6 +20,7 @@ RUN addgroup -S appgroup && adduser -u 1001 -G appgroup -D appuser
 USER appuser
 
 EXPOSE 3000
+STOPSIGNAL SIGINT
 
 WORKDIR /app
 CMD ["node", "src/main.js"]
