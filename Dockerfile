@@ -17,6 +17,9 @@ FROM node:16-alpine
 LABEL Description="Hello Nest.js!"
 
 COPY --from=build /app /app
+RUN addgroup -S appgroup && adduser -u 1001 -G appgroup -D appuser
+USER appuser
+
 EXPOSE 3000
 
 WORKDIR /app
