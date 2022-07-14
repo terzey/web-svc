@@ -7,16 +7,11 @@ import {
 import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { HealthService } from './health.service';
+import { ConfigException } from '../common/types/ConfigException';
 
 interface EnvironmentVariables {
   MEMORY_LIMIT_MB: number;
   MEMORY_THRESHOLD_PERCENT: number;
-}
-
-class ConfigException extends Error {
-  constructor(variableName) {
-    super(`Cannot read environment variable "${variableName}"`);
-  }
 }
 
 @Controller('health')
@@ -35,7 +30,9 @@ export class HealthController {
     const threshold =
       this.configService.get('MEMORY_THRESHOLD_PERCENT', { infer: true }) / 100;
     if (Number.isNaN(threshold)) {
-      throw new ConfigException('MEMORY_THRESHOLD_PERCENT');
+      throw new ConfigException(
+        'Cannot read environment variable "MEMORY_THRESHOLD_PERCENT"',
+      );
     }
     const limit =
       threshold *
@@ -43,7 +40,9 @@ export class HealthController {
       1024 *
       1024;
     if (Number.isNaN(limit)) {
-      throw new ConfigException('MEMORY_LIMIT_MB');
+      throw new ConfigException(
+        'Cannot read environment variable "MEMORY_LIMIT_MB"',
+      );
     }
     const result = this.health.check([
       () => this.memory.checkRSS('memory_rss', limit),
