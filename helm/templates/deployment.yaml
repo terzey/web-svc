@@ -26,6 +26,7 @@ spec:
               cpu: {{ .Values.app.limits.cpu }}
           ports:
             - containerPort: 3000
+              name: http
           readinessProbe:
             httpGet:
               port: 3000
