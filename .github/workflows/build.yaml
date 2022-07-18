@@ -21,4 +21,4 @@ jobs:
       - name: test
         run: npm run test
       - name: build
-        run: docker build . --file Dockerfile --tag terzey/hello-nest:$(date +"%Y-%m-%dT%H-%M-%S")
+        run: docker build . --file Dockerfile --tag terzey/hello-nest

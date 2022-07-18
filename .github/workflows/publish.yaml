@@ -22,8 +22,6 @@ env:
 jobs:
   Publish:
     runs-on: ubuntu-latest
-    env:
-      TA
     steps:
       - uses: actions/checkout@v3
         with:
@@ -49,7 +47,7 @@ jobs:
         run: docker login --username "${DOCKER_USERNAME}" --password "${DOCKER_PASSWORD}"
       - name: docker build
         run: |-
-          IMAGE=terzey/hello-nest:"$(date +"%Y-%m-%dT%H-%M-%S")" &&
+          IMAGE=terzey/hello-nest:"${GITHUB_REF}-$(date +"%Y-%m-%dT%H-%M-%S")" &&
           docker build . --file Dockerfile --tag "${IMAGE}" &&
           docker push "${IMAGE}" &&
           echo "::set-output name=docker_image::${IMAGE}"
