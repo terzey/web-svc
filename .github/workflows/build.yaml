@@ -6,16 +6,9 @@ on:
       - package.json
       - Dockerfile
       - .github/workflows/build.yaml
-  workflow_call:
-    inputs:
-      tag:
-        required: false
-        type: string
 jobs:
   Build:
     runs-on: ubuntu-latest
-    outputs:
-      tag: ${{ steps.docker_tag.outputs.tag }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -27,7 +20,5 @@ jobs:
         run: npm run lint
       - name: test
         run: npm run test
-      - name: docker_tag
-        run: echo "::set-output name=tag::$(date +"%Y-%m-%dT%H-%M-%S")"
       - name: build
-        run: docker build . --file Dockerfile --tag terzey/hello-nest:${{ steps.docker_tag.outputs.tag }}
+        run: docker build . --file Dockerfile --tag terzey/hello-nest:$(date +"%Y-%m-%dT%H-%M-%S")
