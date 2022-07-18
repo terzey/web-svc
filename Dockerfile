@@ -1,6 +1,6 @@
 FROM node:16-alpine as build
 
-ARG GITHUB_REF=local
+ARG GITHUB_REF_NAME=local
 ARG GITHUB_SHA=0000000
 
 ADD . /tmp
@@ -10,7 +10,7 @@ RUN  cd /tmp && \
      npm run build && \
      mv /tmp/dist /app && \
      rm -rf /tmp/node_modules && \
-     npm install --production && \
+     npm install --omit=dev && \
      mv /tmp/node_modules /app
 
 FROM node:16-alpine

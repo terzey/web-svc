@@ -2,10 +2,6 @@ name: Publish
 on:
   workflow_dispatch:
     inputs:
-      appVersion:
-        description: 'package.json version'
-        default: '0.0.1'
-        required: true
       chartVersion:
         description: 'Chart.yaml version'
         default: '0.0.1'
@@ -13,7 +9,6 @@ on:
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
   REPOSITORY_NAME: hello-nest-dev
   REPOSITORY_URL: s3://k9s-helm-repository-bucket-dev/hello-nest/charts
 jobs:
@@ -32,26 +27,11 @@ jobs:
           sudo apt install -y wget
           wget -qO yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
           chmod +x yq
-      - name: version package.json
-        run: |
-          jq '.version = "${{ github.event.inputs.appVersion }}"' package.json > package-1.json
-          rm -f package.json
-          mv package-1.json package.json
       - name: version helm/Chart.yaml
         run: |
           yq '.appVersion = "${{ github.event.inputs.appVersion }}"' helm/Chart.yaml | yq '.version = "${{ github.event.inputs.chartVersion }}"' > helm/Chart-1.yaml
           rm -f helm/Chart.yaml
           mv helm/Chart-1.yaml helm/Chart.yaml
-      - name: docker login
-        run: docker login --username terzey --password "${DOCKER_PASSWORD}"
-      - name: docker build
-        id: docker-image
-        run: |
-          IMAGE=terzey/hello-nest:"${GITHUB_REF_NAME}-$(date +"%Y-%m-%dT%H-%M-%S")"
-          docker build . --file Dockerfile --tag "${IMAGE}" --build-arg GITHUB_REF_NAME="${GITHUB_REF_NAME}" --build-arg GITHUB_SHA="${GITHUB_SHA:0:7}"
-          docker push "${IMAGE}"
-          echo "::set-output name=docker_image::${IMAGE}"
-          echo "::set-output name=docker_image_size::$(docker image inspect ${IMAGE} --format='{{.Size}}')"
       - name: install helm
         run: |
           wget -qO get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
@@ -64,19 +44,9 @@ jobs:
           OUTPUT="$(helm package helm/)"
           RELEASE="$(echo "${OUTPUT}" | sed -E 's/Successfully packaged chart and saved it to: (.+)/\1/')"
           helm s3 push --relative "${RELEASE}" "${REPOSITORY_NAME}"
-      - name: update helm/values.yaml
-        run: |
-          yq '.app.image = "${{ steps.docker-image.outputs.docker_image }}"' helm/values.yaml > helm/values-1.yaml
-          rm -f helm/values.yaml
-          mv helm/values-1.yaml helm/values.yaml
       - uses: peter-evans/create-pull-request@v4
         with:
           add-paths: |
-            package.json
             helm/Chart.yaml
-            helm/values.yaml
           body: |
-            Pushed docker image: ${{ steps.docker-image.outputs.docker_image }}
-            Size: ${{ steps.docker-image.outputs.docker_image_size }} bytes
             Chart version: ${{ github.event.inputs.chartVersion }}
-            Application version: ${{ github.event.inputs.appVersion }}
