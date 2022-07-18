@@ -39,7 +39,7 @@ jobs:
           mv package-1.json package.json
       - name: version helm/Chart.yaml
         run: |
-          yq '.appVersion = "${{ github.event.inputs.appVersion }}"' helm/Chart.yaml | yq '.version = "${{ github.event.inputs.version }}"' > helm/Chart-1.yaml
+          yq '.appVersion = "${{ github.event.inputs.appVersion }}"' helm/Chart.yaml | yq '.version = "${{ github.event.inputs.chartVersion }}"' > helm/Chart-1.yaml
           rm -f helm/Chart.yaml
           mv helm/Chart-1.yaml helm/Chart.yaml
       - name: docker login
