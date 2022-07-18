@@ -5,6 +5,7 @@ on:
       - src
       - package.json
       - Dockerfile
+      - .github/workflows/build.yaml
 jobs:
   Build:
     runs-on: ubuntu-latest
