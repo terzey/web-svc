@@ -46,7 +46,7 @@ jobs:
         run: docker login --username terzey --password "${DOCKER_PASSWORD}"
       - name: docker build
         run: |-
-          IMAGE=terzey/hello-nest:"${GITHUB_REF}-$(date +"%Y-%m-%dT%H-%M-%S")" &&
+          IMAGE=terzey/hello-nest:"${{ github.event.inputs.branch }}-$(date +"%Y-%m-%dT%H-%M-%S")" &&
           echo "${IMAGE}" &&
           docker build . --file Dockerfile --tag "${IMAGE}" &&
           docker push "${IMAGE}" &&
