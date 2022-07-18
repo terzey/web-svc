@@ -27,7 +27,7 @@ jobs:
           chmod +x yq
       - name: Update helm/Chart.yaml
         run: |
-          yq '.appVersion = "${{ github.event.inputs.appVersion }}"' helm/Chart.yaml | yq '.version = "${{ github.event.inputs.chartVersion }}"' > helm/Chart-1.yaml
+          yq '.version = "${{ github.event.inputs.chartVersion }}"' > helm/Chart-1.yaml
           rm -f helm/Chart.yaml
           mv helm/Chart-1.yaml helm/Chart.yaml
       - name: Install helm
