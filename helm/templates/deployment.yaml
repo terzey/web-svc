@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-{{ .Values.app.name }}
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
   namespace: {{ .Release.Namespace }}
 spec:
   replicas: {{ .Values.app.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-{{ .Values.app.name }}
+      app: {{ .Release.Name }}-{{ .Chart.Name }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-{{ .Values.app.name }}
+        app: {{ .Release.Name }}-{{ .Chart.Name }}
     spec:
       containers:
-        - name: {{ .Release.Name }}-{{ .Values.app.name }}
+        - name: {{ .Chart.Name }}
           imagePullPolicy: IfNotPresent
           image: {{ .Values.app.image }}
           resources:
@@ -26,6 +26,7 @@ spec:
               cpu: {{ .Values.app.limits.cpu }}
           ports:
             - containerPort: 3000
+              name: http
           readinessProbe:
             httpGet:
               port: 3000
@@ -54,7 +55,7 @@ spec:
             - name: MEMORY_LIMIT_MB
               valueFrom:
                 resourceFieldRef:
-                  containerName: {{ .Release.Name }}-{{ .Values.app.name }}
+                  containerName: {{ .Chart.Name }}
                   resource: limits.memory
                   divisor: 1Mi
             - name: MEMORY_THRESHOLD_PERCENT
