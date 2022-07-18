@@ -1,0 +1,15 @@
+name: Build
+on: [push]
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: install
+        run: npm install
+      - name: lint
+        run: npm run lint
+      - name: test
+        run: npm run test
+      - name: build
+        run: docker build . --file Dockerfile --tag terzey/hello-nest:$(date +"%Y-%m-%dT%H-%M-%S")
