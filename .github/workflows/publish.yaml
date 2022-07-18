@@ -21,28 +21,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: install jq
+      - name: Install jq
         run: |
           sudo apt update
           sudo apt install -y jq
-      - name: install yq
+      - name: Install yq
         run: |
           sudo apt install -y wget
           wget -qO yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
           chmod +x yq
-      - name: version package.json
+      - name: Update package.json
         run: |
           jq '.version = "${{ github.event.inputs.appVersion }}"' package.json > package-1.json
           rm -f package.json
           mv package-1.json package.json
-      - name: version helm/Chart.yaml
+      - name: Update helm/Chart.yaml
         run: |
           yq '.appVersion = "${{ github.event.inputs.appVersion }}"' helm/Chart.yaml | yq '.version = "${{ github.event.inputs.chartVersion }}"' > helm/Chart-1.yaml
           rm -f helm/Chart.yaml
           mv helm/Chart-1.yaml helm/Chart.yaml
-      - name: docker login
+      - name: Docker login
         run: docker login --username terzey --password "${DOCKER_PASSWORD}"
-      - name: docker build
+      - name: Docker build
         id: docker-image
         run: |
           IMAGE=terzey/hello-nest:"${GITHUB_REF_NAME}-$(date +"%Y-%m-%dT%H-%M-%S")"
@@ -50,23 +50,23 @@ jobs:
           docker push "${IMAGE}"
           echo "::set-output name=docker_image::${IMAGE}"
           echo "::set-output name=docker_image_size::$(docker image inspect ${IMAGE} --format='{{.Size}}')"
-      - name: install helm
+      - name: Install helm
         run: |
           wget -qO get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
           bash get_helm.sh
           helm plugin install https://github.com/hypnoglow/helm-s3.git
-      - name: add repo
+      - name: Add helm repo
         run: helm repo add "${REPOSITORY_NAME}" "${REPOSITORY_URL}"
-      - name: push chart
-        run: |
-          OUTPUT="$(helm package helm/)"
-          RELEASE="$(echo "${OUTPUT}" | sed -E 's/Successfully packaged chart and saved it to: (.+)/\1/')"
-          helm s3 push --relative "${RELEASE}" "${REPOSITORY_NAME}"
-      - name: update helm/values.yaml
+      - name: Update helm/values.yaml
         run: |
           yq '.app.image = "${{ steps.docker-image.outputs.docker_image }}"' helm/values.yaml > helm/values-1.yaml
           rm -f helm/values.yaml
           mv helm/values-1.yaml helm/values.yaml
+      - name: Push helm chart
+        run: |
+          OUTPUT="$(helm package helm/)"
+          RELEASE="$(echo "${OUTPUT}" | sed -E 's/Successfully packaged chart and saved it to: (.+)/\1/')"
+          helm s3 push --relative "${RELEASE}" "${REPOSITORY_NAME}"
       - uses: peter-evans/create-pull-request@v4
         with:
           add-paths: |

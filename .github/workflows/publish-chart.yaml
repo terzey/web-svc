@@ -18,28 +18,28 @@ jobs:
       - Install
     steps:
       - uses: actions/checkout@v3
-      - name: install jq
+      - name: Install jq
         run: |
           sudo apt update
           sudo apt install -y jq
-      - name: install yq
+      - name: Install yq
         run: |
           sudo apt install -y wget
           wget -qO yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
           chmod +x yq
-      - name: version helm/Chart.yaml
+      - name: Update helm/Chart.yaml
         run: |
           yq '.appVersion = "${{ github.event.inputs.appVersion }}"' helm/Chart.yaml | yq '.version = "${{ github.event.inputs.chartVersion }}"' > helm/Chart-1.yaml
           rm -f helm/Chart.yaml
           mv helm/Chart-1.yaml helm/Chart.yaml
-      - name: install helm
+      - name: Install helm
         run: |
           wget -qO get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
           bash get_helm.sh
           helm plugin install https://github.com/hypnoglow/helm-s3.git
-      - name: add repo
+      - name: Add repo
         run: helm repo add "${REPOSITORY_NAME}" "${REPOSITORY_URL}"
-      - name: push chart
+      - name: Push chart
         run: |
           OUTPUT="$(helm package helm/)"
           RELEASE="$(echo "${OUTPUT}" | sed -E 's/Successfully packaged chart and saved it to: (.+)/\1/')"
