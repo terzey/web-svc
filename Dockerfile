@@ -6,6 +6,7 @@ ARG GITHUB_SHA=0000000
 ADD . /tmp
 RUN  cd /tmp && \
      sh ./build.json.sh > build.json && \
+     npm install && \
      npm run build && \
      mv /tmp/dist /app && \
      rm -rf /tmp/node_modules && \

@@ -47,7 +47,6 @@ jobs:
       - name: docker build
         run: |-
           IMAGE=terzey/hello-nest:"${{ github.event.inputs.branch }}-$(date +"%Y-%m-%dT%H-%M-%S")" &&
-          echo "${IMAGE}" &&
           docker build . --file Dockerfile --tag "${IMAGE}" &&
           docker push "${IMAGE}" &&
           echo "::set-output name=docker_image::${IMAGE}"
