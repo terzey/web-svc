@@ -10,7 +10,7 @@ RUN  cd /tmp && \
      npm run build && \
      mv /tmp/dist /app && \
      rm -rf /tmp/node_modules && \
-     npm install --production && \
+     npm install --omit=dev && \
      mv /tmp/node_modules /app
 
 FROM node:16-alpine
