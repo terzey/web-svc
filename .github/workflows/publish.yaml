@@ -17,7 +17,6 @@ on:
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  DOCKER_USERNAME:  ${{ secrets.DOCKER_USERNAME }}
   DOCKER_PASSWORD:  ${{ secrets.DOCKER_PASSWORD }}
 jobs:
   Publish:
@@ -44,10 +43,11 @@ jobs:
           rm -f helm/Chart.yaml &&
           mv helm/Chart-1.yaml helm/Chart.yaml
       - name: docker login
-        run: docker login --username "${DOCKER_USERNAME}" --password "${DOCKER_PASSWORD}"
+        run: docker login --username terzey --password "${DOCKER_PASSWORD}"
       - name: docker build
         run: |-
           IMAGE=terzey/hello-nest:"${GITHUB_REF}-$(date +"%Y-%m-%dT%H-%M-%S")" &&
+          echo "${IMAGE}" &&
           docker build . --file Dockerfile --tag "${IMAGE}" &&
           docker push "${IMAGE}" &&
           echo "::set-output name=docker_image::${IMAGE}"
