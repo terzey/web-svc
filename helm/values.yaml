@@ -1,6 +1,5 @@
 app:
   replicaCount: 1
-  name: hello-nest
   image: terzey/hello-nest:latest
   service:
     port: 3000
