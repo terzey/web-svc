@@ -55,6 +55,7 @@ jobs:
           docker build . --file Dockerfile --tag "${IMAGE}"
           docker push "${IMAGE}"
           echo "::set-output name=docker_image::${IMAGE}"
+          echo "::set-output name=docker_image_size::$(docker image inspect ${IMAGE} --format='{{.Size}}')"
       - name: install helm
         run: |
           wget -qO get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
@@ -79,6 +80,6 @@ jobs:
             helm/Chart.yaml
             helm/values.yaml
           body: |
-            Pushed docker image: ${{ steps.docker-image.outputs.docker_image }}
+            Pushed docker image: ${{ steps.docker-image.outputs.docker_image }} - ${{ steps.docker-image.outputs.docker_image_size }} bytes
             Chart version: ${{ github.event.inputs.chartVersion }}
             Application version: ${{ github.event.inputs.appVersion }}
