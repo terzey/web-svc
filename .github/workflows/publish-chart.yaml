@@ -1,4 +1,4 @@
-name: Publish
+name: Publish Chart
 on:
   workflow_dispatch:
     inputs:
