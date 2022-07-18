@@ -52,4 +52,10 @@ jobs:
           #docker push "${IMAGE}"
           echo "::set-output name=docker_image::${IMAGE}"
       - name: update helm/values.yaml
-        run: echo "${{ steps.docker-image.outputs.docker_image }}"
+        run: |
+          yq '.app.image = "${{ steps.docker-image.outputs.docker_image }}"' helm/values.yaml > helm/values-1.yaml
+          rm -f helm/values.yaml
+          mv helm/values-1.yaml helm/values.yaml
+      - name: create branch
+        run: git checkout -b "${{ github.event.inputs.branch }}"-publish
+      - uses: peter-evans/create-pull-request@v4
