@@ -48,8 +48,8 @@ jobs:
         id: docker-image
         run: |
           IMAGE=terzey/hello-nest:"${{ github.event.inputs.branch }}-$(date +"%Y-%m-%dT%H-%M-%S")"
-          docker build . --file Dockerfile --tag "${IMAGE}"
-          docker push "${IMAGE}"
+          #docker build . --file Dockerfile --tag "${IMAGE}"
+          #docker push "${IMAGE}"
           echo "::set-output name=docker_image::${IMAGE}"
       - name: update helm/values.yaml
-        run: echo "${{ steps.docker-image.outputs.IMAGE }}"
+        run: echo "${{ steps.docker-image.outputs.docker_image }}"
