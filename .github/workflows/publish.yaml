@@ -22,6 +22,6 @@ jobs:
         with:
           ref: '${{ github.event.inputs.branch }}'
       - name: install jq
-        run:  apt update && apt install -y jq
+        run:  sudo apt update && sudo apt install -y jq
       - name: install yq
-        run: apt install -y wget && wget -qO yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 && chmod +x yq
+        run: sudo apt install -y wget && wget -qO yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 && chmod +x yq
