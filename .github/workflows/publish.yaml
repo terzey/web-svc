@@ -24,4 +24,17 @@ jobs:
       - name: install jq
         run:  sudo apt update && sudo apt install -y jq
       - name: install yq
-        run: sudo apt install -y wget && wget -qO yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 && chmod +x yq
+        run: |-
+          sudo apt install -y wget &&
+          wget -qO yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 &&
+          chmod +x yq
+      - name: version package.json
+        run: |-
+          jq '.version = "${{ github.event.inputs.appVersion }}"' package.json > package-1.json &&
+          rm -f package.json &&
+          mv package-1.json package.json
+      - name: version helm/Chart.yaml
+        run: |-
+          yq '.appVersion = "0.0.5"' helm/Chart.yaml | yq '.version = "0.0.5"' > helm/Chart-1.yaml &&
+          rm -f helm/Chart.yaml &&
+          mv helm/Chart-1.yaml helm/Chart.yaml
