@@ -10,7 +10,7 @@ describe('MetricsService', () => {
       providers: [
         MetricsService,
         makeSummaryProvider({
-          name: 'http_request_duration_seconds',
+          name: 'hello_nest_http_request_duration_seconds',
           help: 'Http request duration in seconds',
           labelNames: ['handler', 'method', 'status_code'],
         }),
