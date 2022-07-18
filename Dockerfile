@@ -1,6 +1,6 @@
 FROM node:16-alpine as build
 
-ARG GITHUB_REF=local
+ARG GITHUB_REF_NAME=local
 ARG GITHUB_SHA=0000000
 
 ADD . /tmp

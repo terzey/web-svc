@@ -10,10 +10,6 @@ on:
         description: 'Chart.yaml version'
         default: '0.0.1'
         required: true
-      branch:
-        description: 'branch name'
-        default: 'main'
-        required: true
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -25,8 +21,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: '${{ github.event.inputs.branch }}'
       - name: install jq
         run: |
           sudo apt update
@@ -51,8 +45,8 @@ jobs:
       - name: docker build
         id: docker-image
         run: |
-          IMAGE=terzey/hello-nest:"${{ github.event.inputs.branch }}-$(date +"%Y-%m-%dT%H-%M-%S")"
-          docker build . --file Dockerfile --tag "${IMAGE}"
+          IMAGE=terzey/hello-nest:"${GITHUB_REF_NAME}-$(date +"%Y-%m-%dT%H-%M-%S")"
+          docker build . --file Dockerfile --tag "${IMAGE}" --build-arg GITHUB_REF_NAME="${GITHUB_REF_NAME}" --build-arg GITHUB_SHA="${GITHUB_SHA:0:7}"
           docker push "${IMAGE}"
           echo "::set-output name=docker_image::${IMAGE}"
           echo "::set-output name=docker_image_size::$(docker image inspect ${IMAGE} --format='{{.Size}}')"
@@ -80,6 +74,7 @@ jobs:
             helm/Chart.yaml
             helm/values.yaml
           body: |
-            Pushed docker image: ${{ steps.docker-image.outputs.docker_image }} - ${{ steps.docker-image.outputs.docker_image_size }} bytes
+            Pushed docker image: ${{ steps.docker-image.outputs.docker_image }}
+            Size: ${{ steps.docker-image.outputs.docker_image_size }} bytes
             Chart version: ${{ github.event.inputs.chartVersion }}
             Application version: ${{ github.event.inputs.appVersion }}
