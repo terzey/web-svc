@@ -4,7 +4,7 @@
 ### Helm Repo Commands
 #### Init repo
 ```shell
-. bin/profile.sh && helm s3 init "${REPOSITORY_URL}" && 
+. bin/profile.sh && helm s3 init "${REPOSITORY_URL}"
 ```
 #### Add repo
 ```shell
