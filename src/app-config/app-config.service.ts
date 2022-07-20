@@ -7,7 +7,7 @@ import { version } from '../../package.json';
 
 interface EnvironmentVariables {
   MEMORY_LIMIT_MB: number;
-  CPU_LIMIT_SECONDS: number;
+  CPU_LIMIT_MILLISECONDS: number;
   MEMORY_THRESHOLD_PERCENT: number;
   CHART_VERSION: string;
 }
@@ -22,7 +22,7 @@ export interface IBuild {
 
 interface ICache {
   build: IBuild;
-  cpuLimitSeconds: number;
+  cpuLimitMilliseconds: number;
   memoryLimitBytes: number;
   memoryThresholdPercents: number;
 }
@@ -35,8 +35,8 @@ export class AppConfigService implements OnModuleInit {
 
   private build: IBuild;
 
-  getCpuLimitSeconds() {
-    return this.cache.cpuLimitSeconds;
+  getCpuLimitMilliseconds() {
+    return this.cache.cpuLimitMilliseconds;
   }
 
   getMemoryLimitBytes() {
@@ -92,7 +92,7 @@ export class AppConfigService implements OnModuleInit {
     }
 
     this.cache = {
-      cpuLimitSeconds: this.getEnvAsFloat('CPU_LIMIT_SECONDS'),
+      cpuLimitMilliseconds: this.getEnvAsFloat('CPU_LIMIT_MILLISECONDS'),
       memoryLimitBytes: this.getEnvAsInt('MEMORY_LIMIT_MB') * 1024 * 1024,
       memoryThresholdPercents:
         this.getEnvAsInt('MEMORY_THRESHOLD_PERCENT') / 100,

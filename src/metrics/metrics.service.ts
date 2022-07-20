@@ -69,7 +69,7 @@ export class MetricsService implements OnApplicationBootstrap {
       const cpuUsage =
         cpuDurationMicroseconds /
         timeDurationMicroseconds /
-        this.appConfigService.getCpuLimitSeconds();
+        (this.appConfigService.getCpuLimitMilliseconds() / 1000);
       this.processCpuPercents.set(100 * cpuUsage);
     }
     this.processCpuSecondsTotal.set(cpuTimeMicroseconds * 1e-6);
@@ -84,6 +84,8 @@ export class MetricsService implements OnApplicationBootstrap {
       this.appConfigService.getBuild();
     this.build.set({ version, chartVersion, branch, timestamp, commit }, 1);
     this.memoryLimitBytes.set(this.appConfigService.getMemoryLimitBytes());
-    this.processCpuLimitSeconds.set(this.appConfigService.getCpuLimitSeconds());
+    this.processCpuLimitSeconds.set(
+      this.appConfigService.getCpuLimitMilliseconds() * 1e-3,
+    );
   }
 }
