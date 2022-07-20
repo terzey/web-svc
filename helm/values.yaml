@@ -1,6 +1,6 @@
 app:
   replicaCount: 1
-  image: terzey/hello-nest:main-2022-07-20T10-52-06
+  image: terzey/web-svc:main-2022-07-20T10-52-06
   service:
     port: 3000
   limits:
@@ -9,3 +9,9 @@ app:
   check:
     readiness:
       memoryPercentThreshold: 90
+infra:
+  imagePullSecrets:
+    - regcred
+mon:
+  prometheus:
+    installServiceMonitor: true

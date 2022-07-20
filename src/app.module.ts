@@ -7,20 +7,11 @@ import { LoggerService } from './logger/logger.service';
 import { LoggerModule } from './logger/logger.module';
 import { MetricsModule } from './metrics/metrics.module';
 import { MetricsMiddleware } from './common/middleware/metrics.middleware';
-import { AppConfigService } from './app-config/app-config.service';
-import { AppConfigModule } from './app-config/app-config.module';
-import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [
-    HealthModule,
-    LoggerModule,
-    MetricsModule,
-    AppConfigModule,
-    ConfigModule,
-  ],
+  imports: [HealthModule, LoggerModule, MetricsModule],
   controllers: [AppController],
-  providers: [AppService, LoggerService, AppConfigService],
+  providers: [AppService, LoggerService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

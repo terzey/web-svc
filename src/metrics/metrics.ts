@@ -1,7 +1,7 @@
 import { MetricConfiguration } from 'prom-client';
 
-export const APP_NAME = 'hello-nest';
-export const PREFIX = 'hello_nest';
+export const APP_NAME = 'web-svc';
+export const PREFIX = 'web_svc';
 
 export const HttpRequestDurationSeconds: MetricConfiguration<string> = {
   name: `${PREFIX}_http_request_duration_seconds`,

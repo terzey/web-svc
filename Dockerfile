@@ -14,7 +14,7 @@ RUN  cd /tmp && \
      mv /tmp/node_modules /app
 
 FROM node:16-alpine
-LABEL Description="Hello Nest.js!"
+LABEL Description="web-svc"
 
 COPY --from=build /app /app
 RUN addgroup -S appgroup && adduser -u 1001 -G appgroup -D appuser

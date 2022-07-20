@@ -81,7 +81,7 @@ export class MetricsService implements OnApplicationBootstrap {
 
   onApplicationBootstrap(): any {
     const { version, chartVersion, branch, timestamp, commit } =
-      this.appConfigService.getBuild();
+      this.appConfigService.getVersion();
     this.build.set({ version, chartVersion, branch, timestamp, commit }, 1);
     this.memoryLimitBytes.set(this.appConfigService.getMemoryLimitBytes());
     this.processCpuLimitSeconds.set(

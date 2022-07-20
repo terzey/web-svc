@@ -1,6 +1,6 @@
 apiVersion: v2
-name: hello-nest
-description: A Helm chart for hello-nest
+name: web-svc
+description: A Helm chart for web-svc
 type: application
 version: 0.1.12
 appVersion: "0.1.3"

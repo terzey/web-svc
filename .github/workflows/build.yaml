@@ -2,10 +2,12 @@ name: Build
 on:
   push:
     paths:
-      - src
+      - src/**
       - package.json
       - Dockerfile
       - .github/workflows/build.yaml
+env:
+  IMAGE_NAME: terzey/web-svc
 jobs:
   Build:
     runs-on: ubuntu-latest
@@ -21,4 +23,4 @@ jobs:
       - name: test
         run: npm run test
       - name: build
-        run: docker build . --file Dockerfile --tag terzey/hello-nest
+        run: docker build . --file Dockerfile --tag "${IMAGE_NAME}"

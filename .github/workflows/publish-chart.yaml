@@ -9,8 +9,8 @@ on:
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  REPOSITORY_NAME: hello-nest-dev
-  REPOSITORY_URL: s3://k9s-helm-repository-bucket-dev/hello-nest/charts
+  REPOSITORY_NAME: web-app-dev
+  REPOSITORY_URL: s3://k8s-helm-repository-bucket-dev/web-app/charts
 jobs:
   Publish:
     runs-on: ubuntu-latest

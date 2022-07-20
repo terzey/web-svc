@@ -1,6 +1,7 @@
 ## Helm
 [Helm s3](https://github.com/hypnoglow/helm-s3) plugin is used.
-### Commands
+## Helm
+### Helm Repo Commands
 #### Init repo
 ```shell
 . bin/profile.sh && helm s3 init "${REPOSITORY_URL}" && 
@@ -12,6 +13,15 @@
 #### Push chart to repo
 ```shell
 bash bin/push-chart.sh
+```
+### Helm Chart Commands
+Deploy
+```shell
+helm install --create-namespace --set mon.prometheus.installServiceMonitor=false app ./helm
+```
+Update
+```shell
+helm upgrade app ./helm
 ```
 
 ## Description
@@ -49,17 +59,3 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
