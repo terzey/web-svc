@@ -1,17 +1,21 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService, IVersion } from './app.service';
+import { AppService } from './app.service';
+import { AppConfigService, IBuild } from './app-config/app-config.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+    private readonly appConfigService: AppConfigService,
+  ) {}
 
   @Get()
   getHello(): string {
     return this.appService.getHello();
   }
 
-  @Get('/self/version')
-  getVersion(): IVersion {
-    return this.appService.getVersion();
+  @Get('/self/build')
+  getBuild(): IBuild {
+    return this.appConfigService.getBuild();
   }
 }

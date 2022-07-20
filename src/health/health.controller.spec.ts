@@ -4,6 +4,7 @@ import { HealthService } from './health.service';
 import { LoggerService } from '../logger/logger.service';
 import { HealthCheckService, MemoryHealthIndicator } from '@nestjs/terminus';
 import { HealthCheckExecutor } from '@nestjs/terminus/dist/health-check/health-check-executor.service';
+import { AppConfigService } from '../app-config/app-config.service';
 import { ConfigService } from '@nestjs/config';
 
 describe('HealthController', () => {
@@ -18,6 +19,7 @@ describe('HealthController', () => {
         HealthCheckExecutor,
         LoggerService,
         HealthService,
+        AppConfigService,
         ConfigService,
       ],
     }).compile();

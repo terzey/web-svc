@@ -58,5 +58,13 @@ spec:
                   containerName: {{ .Chart.Name }}
                   resource: limits.memory
                   divisor: 1Mi
+            - name: CPU_LIMIT_MB
+              valueFrom:
+                resourceFieldRef:
+                  containerName: {{ .Chart.Name }}
+                  resource: limits.cpu
+                  divisor: 1000m
             - name: MEMORY_THRESHOLD_PERCENT
               value: "{{ .Values.app.check.readiness.memoryPercentThreshold }}"
+            - name: CHART_VERSION
+              value: {{ .Chart.Version }}

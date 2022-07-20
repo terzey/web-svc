@@ -4,7 +4,7 @@ app:
   service:
     port: 3000
   limits:
-    memory: 200Mi
+    memory: 100Mi
     cpu: 200m
   check:
     readiness:

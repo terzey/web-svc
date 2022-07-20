@@ -12,13 +12,7 @@ import {
   HealthCheckResult,
 } from '@nestjs/terminus';
 import { LoggerService } from '../logger/logger.service';
-import { ConfigException } from '../common/types/ConfigException';
-import { ConfigService } from '@nestjs/config';
-
-interface EnvironmentVariables {
-  MEMORY_LIMIT_MB: number;
-  MEMORY_THRESHOLD_PERCENT: number;
-}
+import { AppConfigService } from '../app-config/app-config.service';
 
 @Injectable()
 export class HealthService
@@ -29,14 +23,12 @@ export class HealthService
     private logger: LoggerService,
     private health: HealthCheckService,
     private memory: MemoryHealthIndicator,
-    private configService: ConfigService<EnvironmentVariables>,
+    private appConfigService: AppConfigService,
   ) {
     logger.setContext(HealthService.name);
     super();
   }
   private ready = false;
-  private threshold: number;
-  private limit: number;
 
   async isRunning(key: string): Promise<HealthIndicatorResult> {
     const result = this.getStatus(key, this.ready);
@@ -48,8 +40,11 @@ export class HealthService
 
   getRedinessCheck(): Promise<HealthCheckResult> {
     return this.health.check([
-      () => this.memory.checkRSS('memory_rss', this.limit),
-      () => this.memory.checkHeap('memory_heap', this.limit),
+      () =>
+        this.memory.checkRSS(
+          'memory_rss',
+          this.appConfigService.getMemoryLimitBytes(),
+        ),
       () => this.isRunning('application'),
     ]);
   }
@@ -64,23 +59,6 @@ export class HealthService
 
   onApplicationBootstrap(): any {
     this.logger.log('Application started');
-    this.threshold =
-      this.configService.get('MEMORY_THRESHOLD_PERCENT', { infer: true }) / 100;
-    if (Number.isNaN(this.threshold)) {
-      throw new ConfigException(
-        'Cannot read environment variable "MEMORY_THRESHOLD_PERCENT"',
-      );
-    }
-    this.limit =
-      this.threshold *
-      this.configService.get('MEMORY_LIMIT_MB', { infer: true }) *
-      1024 *
-      1024;
-    if (Number.isNaN(this.limit)) {
-      throw new ConfigException(
-        'Cannot read environment variable "MEMORY_LIMIT_MB"',
-      );
-    }
     this.ready = true;
   }
 
