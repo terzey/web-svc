@@ -1,6 +1,6 @@
 app:
   replicaCount: 1
-  image: terzey/hello-nest:main-2022-07-20T08-35-35
+  image: terzey/hello-nest:main-2022-07-20T08-41-49
   service:
     port: 3000
   limits:
