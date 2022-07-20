@@ -58,7 +58,7 @@ spec:
                   containerName: {{ .Chart.Name }}
                   resource: limits.memory
                   divisor: 1Mi
-            - name: CPU_LIMIT_MB
+            - name: CPU_LIMIT_SECONDS
               valueFrom:
                 resourceFieldRef:
                   containerName: {{ .Chart.Name }}
