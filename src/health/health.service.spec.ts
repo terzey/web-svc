@@ -2,8 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { HealthService } from './health.service';
 import { LoggerService } from '../logger/logger.service';
 import { HealthCheckService, MemoryHealthIndicator } from '@nestjs/terminus';
-import { ConfigService } from '@nestjs/config';
 import { HealthCheckExecutor } from '@nestjs/terminus/dist/health-check/health-check-executor.service';
+import { AppConfigService } from '../app-config/app-config.service';
+import { ConfigService } from '@nestjs/config';
 
 describe('HealthService', () => {
   let service: HealthService;
@@ -16,6 +17,7 @@ describe('HealthService', () => {
         HealthCheckService,
         MemoryHealthIndicator,
         LoggerService,
+        AppConfigService,
         ConfigService,
       ],
     }).compile();

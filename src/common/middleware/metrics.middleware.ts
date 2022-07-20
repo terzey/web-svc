@@ -8,7 +8,7 @@ export class MetricsMiddleware implements NestMiddleware {
 
   use(req: Request, res: Response, next: NextFunction) {
     const { baseUrl, method } = req;
-    const end = this.metricsService.startTimer();
+    const end = this.metricsService.httpRequestStartTimer();
     res.on('finish', () => {
       end({
         handler: baseUrl,

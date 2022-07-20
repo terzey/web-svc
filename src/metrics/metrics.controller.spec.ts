@@ -1,6 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { MetricsController } from './metrics.controller';
 import { MetricsService } from './metrics.service';
-import { makeGaugeProvider, makeSummaryProvider } from '@willsoto/nestjs-prometheus';
+import {
+  makeGaugeProvider,
+  makeSummaryProvider,
+} from '@willsoto/nestjs-prometheus';
 import {
   Build,
   HttpRequestDurationSeconds,
@@ -15,8 +19,8 @@ import {
 import { AppConfigService } from '../app-config/app-config.service';
 import { ConfigService } from '@nestjs/config';
 
-describe('MetricsService', () => {
-  let service: MetricsService;
+describe('MetricsController', () => {
+  let controller: MetricsController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -34,12 +38,13 @@ describe('MetricsService', () => {
         makeGaugeProvider(ProcessCpuLimitSeconds),
         makeGaugeProvider(ProcessCpuPercents),
       ],
+      controllers: [MetricsController],
     }).compile();
 
-    service = module.get<MetricsService>(MetricsService);
+    controller = module.get<MetricsController>(MetricsController);
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(controller).toBeDefined();
   });
 });

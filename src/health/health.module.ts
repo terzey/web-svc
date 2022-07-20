@@ -1,17 +1,21 @@
 import { Module } from '@nestjs/common';
 import { TerminusModule } from '@nestjs/terminus';
 import { HealthController } from './health.controller';
-import { ConfigModule } from '@nestjs/config';
+import { AppConfigModule } from '../app-config/app-config.module';
 import { HealthService } from './health.service';
 import { LoggerModule } from '../logger/logger.module';
+import { AppConfigService } from '../app-config/app-config.service';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     TerminusModule,
-    ConfigModule.forRoot({ cache: true }),
+    AppConfigModule,
     LoggerModule,
+    AppConfigModule,
+    ConfigModule,
   ],
   controllers: [HealthController],
-  providers: [HealthService],
+  providers: [HealthService, AppConfigService],
 })
 export class HealthModule {}
