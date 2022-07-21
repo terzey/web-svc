@@ -4,6 +4,7 @@ import { MetricsService } from './metrics.service';
 import {
   makeGaugeProvider,
   makeSummaryProvider,
+  makeCounterProvider,
 } from '@willsoto/nestjs-prometheus';
 import {
   Build,
@@ -15,6 +16,7 @@ import {
   ProcessCpuPercents,
   ProcessCpuSecondsTotal,
   UptimeSeconds,
+  HttpRequestCountTotal,
 } from './metrics';
 import { AppConfigService } from '../app-config/app-config.service';
 import { ConfigService } from '@nestjs/config';
@@ -29,6 +31,7 @@ describe('MetricsController', () => {
         AppConfigService,
         ConfigService,
         makeSummaryProvider(HttpRequestDurationSeconds),
+        makeCounterProvider(HttpRequestCountTotal),
         makeGaugeProvider(UptimeSeconds),
         makeGaugeProvider(Build),
         makeGaugeProvider(MemoryBytes),

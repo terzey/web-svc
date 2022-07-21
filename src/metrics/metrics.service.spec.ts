@@ -1,6 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MetricsService } from './metrics.service';
-import { makeGaugeProvider, makeSummaryProvider } from '@willsoto/nestjs-prometheus';
+import {
+  makeGaugeProvider,
+  makeSummaryProvider,
+  makeCounterProvider,
+} from '@willsoto/nestjs-prometheus';
 import {
   Build,
   HttpRequestDurationSeconds,
@@ -11,6 +15,7 @@ import {
   ProcessCpuPercents,
   ProcessCpuSecondsTotal,
   UptimeSeconds,
+  HttpRequestCountTotal,
 } from './metrics';
 import { AppConfigService } from '../app-config/app-config.service';
 import { ConfigService } from '@nestjs/config';
@@ -25,6 +30,7 @@ describe('MetricsService', () => {
         AppConfigService,
         ConfigService,
         makeSummaryProvider(HttpRequestDurationSeconds),
+        makeCounterProvider(HttpRequestCountTotal),
         makeGaugeProvider(UptimeSeconds),
         makeGaugeProvider(Build),
         makeGaugeProvider(MemoryBytes),

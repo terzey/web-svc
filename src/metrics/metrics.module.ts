@@ -3,12 +3,14 @@ import { MetricsService } from './metrics.service';
 import {
   makeGaugeProvider,
   makeSummaryProvider,
+  makeCounterProvider,
   PrometheusModule,
 } from '@willsoto/nestjs-prometheus';
 import {
   APP_NAME,
   Build,
   HttpRequestDurationSeconds,
+  HttpRequestCountTotal,
   MemoryLimitBytes,
   MemoryBytes,
   MemoryPercents,
@@ -40,6 +42,7 @@ import { AppConfigService } from '../app-config/app-config.service';
     MetricsService,
     AppConfigService,
     makeSummaryProvider(HttpRequestDurationSeconds),
+    makeCounterProvider(HttpRequestCountTotal),
     makeGaugeProvider(UptimeSeconds),
     makeGaugeProvider(Build),
     makeGaugeProvider(MemoryBytes),
