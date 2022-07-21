@@ -1,11 +1,11 @@
 name: Build
 on:
   push:
-    paths:
-      - src/**
-      - package.json
-      - Dockerfile
-      - .github/workflows/build.yaml
+    paths-ignore:
+      - .github/workflows/publish.yaml
+      - .github/workflows/publish-chart.yaml
+      - helm/**
+      - README.md
 env:
   IMAGE_NAME: terzey/web-svc
 jobs:
