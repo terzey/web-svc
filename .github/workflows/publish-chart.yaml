@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       bumpChartSever:
-        description: 'Chart.yaml semver bump. It should be one of MAJOR, MINOR or PATCH'
+        description: 'Chart.yaml bump - it should be one of MAJOR, MINOR or PATCH'
         default: 'PATCH'
         required: true
 env:
@@ -60,6 +60,5 @@ jobs:
 
       - uses: peter-evans/enable-pull-request-automerge@v2
         name: Merge pull-request
-        if: steps.pull-request.outputs.pull-request-operation == 'created'
         with:
           pull-request-number: ${{steps.pull-request.outputs.pull-request-number}}
