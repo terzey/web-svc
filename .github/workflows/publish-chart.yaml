@@ -2,7 +2,7 @@ name: Publish Chart
 on:
   workflow_dispatch:
     inputs:
-      bumpChartSever:
+      bumpChartSemver:
         description: Chart.yaml semver to bump - it should be one of MAJOR, MINOR or PATCH
         default: PATCH
         required: true
@@ -40,7 +40,7 @@ jobs:
       - id: semver
         name: Update helm/Chart.yaml
         run: |
-          bash bin/bump-semver.sh helm/Chart.yaml "${{ github.event.inputs.bumpChartSever }}"
+          bash bin/bump-semver.sh helm/Chart.yaml "${{ github.event.inputs.bumpChartSemver }}"
           echo "::set-output version=$(yq '.version' helm/Chart.yaml)"
 
       - name: Push chart
@@ -55,6 +55,8 @@ jobs:
         with:
           add-paths: |
             helm/Chart.yaml
+          title:
+            Publish helm/Chart.yaml ${{ steps.semver.outputs.version }}
           body: |
             Chart version: ${{ steps.semver.outputs.version }}
           labels: automerge
@@ -63,9 +65,3 @@ jobs:
         name: Merge pull-request
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
-
-#      - uses: peter-evans/enable-pull-request-automerge@v2
-#        name: Merge pull-request
-#        with:
-#          pull-request-number: ${{steps.pull-request.outputs.pull-request-number}}
-#          token: ${{ secrets.TOKEN_GITHUB }}
