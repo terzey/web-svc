@@ -3,7 +3,8 @@ import { ConfigException } from '../common/types/ConfigException';
 import { dirname, join } from 'path';
 import { readFileSync } from 'fs';
 import { ConfigService } from '@nestjs/config';
-import { version } from '../../package.json';
+import { version as appVersion } from '../../package.json';
+import { IVersion } from './types';
 
 interface EnvironmentVariables {
   MEMORY_LIMIT_MB: number;
@@ -12,16 +13,8 @@ interface EnvironmentVariables {
   CHART_VERSION: string;
 }
 
-export interface IBuild {
-  version: string;
-  chartVersion: string;
-  branch: string;
-  timestamp: string;
-  commit: string;
-}
-
 interface ICache {
-  build: IBuild;
+  version: IVersion;
   cpuLimitMilliseconds: number;
   memoryLimitBytes: number;
   memoryThresholdPercents: number;
@@ -32,8 +25,6 @@ export class AppConfigService implements OnModuleInit {
   constructor(private configService: ConfigService<EnvironmentVariables>) {}
 
   private cache: ICache;
-
-  private build: IBuild;
 
   getCpuLimitMilliseconds() {
     return this.cache.cpuLimitMilliseconds;
@@ -47,8 +38,8 @@ export class AppConfigService implements OnModuleInit {
     return this.cache.memoryThresholdPercents;
   }
 
-  getBuild(): IBuild {
-    return this.cache.build;
+  getVersion(): IVersion {
+    return this.cache.version;
   }
 
   private getEnvAsInt(name): number {
@@ -74,14 +65,14 @@ export class AppConfigService implements OnModuleInit {
   }
 
   private loadCache() {
-    let build: IBuild;
+    let version: IVersion;
     try {
       const dir = dirname(module.filename);
       const path = join(dir, '../../build.json');
       const content = readFileSync(path).toString();
       const { branch, timestamp, commit } = JSON.parse(content);
-      build = {
-        version,
+      version = {
+        version: appVersion,
         chartVersion: this.configService.get('CHART_VERSION'),
         branch,
         timestamp,
@@ -96,7 +87,7 @@ export class AppConfigService implements OnModuleInit {
       memoryLimitBytes: this.getEnvAsInt('MEMORY_LIMIT_MB') * 1024 * 1024,
       memoryThresholdPercents:
         this.getEnvAsInt('MEMORY_THRESHOLD_PERCENT') / 100,
-      build,
+      version,
     };
   }
 

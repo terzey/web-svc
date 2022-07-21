@@ -14,8 +14,9 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-  REPOSITORY_NAME: hello-nest-dev
-  REPOSITORY_URL: s3://k9s-helm-repository-bucket-dev/hello-nest/charts
+  REPOSITORY_NAME: web-svc-dev
+  REPOSITORY_URL: s3://k8s-helm-repository-bucket-dev/web-svc/charts
+  IMAGE_NAME: terzey/web-svc
 jobs:
   Publish:
     runs-on: ubuntu-latest
@@ -45,7 +46,7 @@ jobs:
       - name: Docker build
         id: docker-image
         run: |
-          IMAGE=terzey/hello-nest:"${GITHUB_REF_NAME}-$(date +"%Y-%m-%dT%H-%M-%S")"
+          IMAGE=${IMAGE_NAME}:"${GITHUB_REF_NAME}-$(date +"%Y-%m-%dT%H-%M-%S")"
           docker build . --file Dockerfile --tag "${IMAGE}" --build-arg GITHUB_REF_NAME="${GITHUB_REF_NAME}" --build-arg GITHUB_SHA="${GITHUB_SHA:0:7}"
           docker push "${IMAGE}"
           echo "::set-output name=docker_image::${IMAGE}"

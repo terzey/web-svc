@@ -10,11 +10,13 @@ export class MetricsMiddleware implements NestMiddleware {
     const { baseUrl, method } = req;
     const end = this.metricsService.httpRequestStartTimer();
     res.on('finish', () => {
-      end({
+      const labels = {
         handler: baseUrl,
         method: method,
         status_code: res.statusCode,
-      });
+      };
+      end(labels);
+      this.metricsService.getHttpRequestCountTotal().inc(labels);
     });
     next();
   }

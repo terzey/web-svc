@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------------------
 You have successfully installed "{{ .Release.Name }}" into "{{ .Release.Namespace }}" namespace of your kubernetes cluster!
 To access app please run
-kubectl port-forward service/{{ .Release.Name }}-{{ .Values.app.name }} -n {{ .Release.Namespace }} 30300:{{ .Values.app.service.port }}
-Once done, navigate to http://localhost:30300/self/build
+kubectl port-forward svc/{{ .Release.Name }}-{{ .Chart.Name }} -n {{ .Release.Namespace }} 3000
+Once done, navigate to http://localhost:3000/self/version
 -----------------------------------------------------------------------------------

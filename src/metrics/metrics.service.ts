@@ -1,6 +1,6 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectMetric } from '@willsoto/nestjs-prometheus';
-import { Gauge, LabelValues, Summary } from 'prom-client';
+import { Counter, Gauge, LabelValues, Summary } from 'prom-client';
 import {
   Build,
   HttpRequestDurationSeconds,
@@ -10,7 +10,7 @@ import {
   ProcessCpuLimitSeconds,
   ProcessCpuPercents,
   ProcessCpuSecondsTotal,
-  UptimeSeconds,
+  UptimeSeconds, HttpRequestCountTotal,
 } from './metrics';
 import { AppConfigService } from '../app-config/app-config.service';
 import { uptime, memoryUsage, cpuUsage, hrtime } from 'node:process';
@@ -26,28 +26,34 @@ export class MetricsService implements OnApplicationBootstrap {
     private appConfigService: AppConfigService,
     @InjectMetric(HttpRequestDurationSeconds.name)
     private httpRequestDuration: Summary<string>,
+    @InjectMetric(HttpRequestCountTotal.name)
+    private httpRequestCountTotal: Counter<string>,
     @InjectMetric(UptimeSeconds.name)
     private uptime: Gauge<string>,
     @InjectMetric(Build.name)
     private build: Gauge<string>,
     @InjectMetric(MemoryBytes.name)
-    private memoryBytes,
+    private memoryBytes: Gauge<string>,
     @InjectMetric(MemoryPercents.name)
-    private memoryPercents,
+    private memoryPercents: Gauge<string>,
     @InjectMetric(MemoryLimitBytes.name)
-    private memoryLimitBytes,
+    private memoryLimitBytes: Gauge<string>,
     @InjectMetric(ProcessCpuSecondsTotal.name)
-    private processCpuSecondsTotal,
+    private processCpuSecondsTotal: Gauge<string>,
     @InjectMetric(ProcessCpuLimitSeconds.name)
-    private processCpuLimitSeconds,
+    private processCpuLimitSeconds: Gauge<string>,
     @InjectMetric(ProcessCpuPercents.name)
-    private processCpuPercents,
+    private processCpuPercents: Gauge<string>,
   ) {}
 
   private lastCpuTick: ICpuTick;
 
   httpRequestStartTimer(): (labels?: LabelValues<string>) => void {
     return this.httpRequestDuration.startTimer();
+  }
+
+  getHttpRequestCountTotal(): Counter<string> {
+    return this.httpRequestCountTotal;
   }
 
   observeCustomMetrics() {
@@ -81,7 +87,7 @@ export class MetricsService implements OnApplicationBootstrap {
 
   onApplicationBootstrap(): any {
     const { version, chartVersion, branch, timestamp, commit } =
-      this.appConfigService.getBuild();
+      this.appConfigService.getVersion();
     this.build.set({ version, chartVersion, branch, timestamp, commit }, 1);
     this.memoryLimitBytes.set(this.appConfigService.getMemoryLimitBytes());
     this.processCpuLimitSeconds.set(

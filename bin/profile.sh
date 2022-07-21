@@ -7,5 +7,5 @@ if [ -f "${DOT_ENV}" ]; then
   . "${DOT_ENV}"
 fi
 
-export REPOSITORY_NAME="hello-nest-dev"
-export REPOSITORY_URL="s3://k9s-helm-repository-bucket-dev/hello-nest/charts"
+export REPOSITORY_NAME="web-svc-dev"
+export REPOSITORY_URL="s3://k8s-helm-repository-bucket-dev/web-svc/charts"

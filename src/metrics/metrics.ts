@@ -1,11 +1,23 @@
-import { MetricConfiguration } from 'prom-client';
+import { MetricConfiguration, SummaryConfiguration } from 'prom-client';
 
-export const APP_NAME = 'hello-nest';
-export const PREFIX = 'hello_nest';
+export const APP_NAME = 'web-svc';
+export const PREFIX = 'web_svc';
+const maxAgeSeconds = 5;
+const ageBuckets = 5;
+const percentiles = [0.01, 0.5, 0.95, 0.99];
 
-export const HttpRequestDurationSeconds: MetricConfiguration<string> = {
+export const HttpRequestDurationSeconds: SummaryConfiguration<string> = {
   name: `${PREFIX}_http_request_duration_seconds`,
   help: `Http request duration in seconds for ${APP_NAME}`,
+  labelNames: ['handler', 'method', 'status_code'],
+  maxAgeSeconds,
+  ageBuckets,
+  percentiles,
+};
+
+export const HttpRequestCountTotal: MetricConfiguration<string> = {
+  name: `${PREFIX}_http_request_count_total`,
+  help: `Total count of http requests for ${APP_NAME}`,
   labelNames: ['handler', 'method', 'status_code'],
 };
 
