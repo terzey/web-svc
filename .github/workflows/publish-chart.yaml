@@ -2,9 +2,9 @@ name: Publish Chart
 on:
   workflow_dispatch:
     inputs:
-      chartVersion:
-        description: 'Chart.yaml version'
-        default: '0.0.1'
+      bumpChartSever:
+        description: 'Chart.yaml semver bump. It should be one of MAJOR, MINOR or PATCH'
+        default: 'PATCH'
         required: true
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -16,35 +16,50 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Install jq
         run: |
           sudo apt update
           sudo apt install -y jq
+
       - name: Install yq
         run: |
           sudo apt install -y wget
           wget -qO yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
           chmod +x yq
-      - name: Update helm/Chart.yaml
-        run: |
-          yq '.version = "${{ github.event.inputs.chartVersion }}"' helm/Chart.yaml > helm/Chart-1.yaml
-          rm -f helm/Chart.yaml
-          mv helm/Chart-1.yaml helm/Chart.yaml
+
       - name: Install helm
         run: |
           wget -qO get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
           bash get_helm.sh
           helm plugin install https://github.com/hypnoglow/helm-s3.git
+
       - name: Add repo
         run: helm repo add "${REPOSITORY_NAME}" "${REPOSITORY_URL}"
+
+      - id: semver
+      - name: Update helm/Chart.yaml
+        run: |
+          bash bin/bump-semver.sh helm/Chart.yaml "${{ github.event.inputs.bumpChartSever }}"
+          echo "::set-output version=$(yq '.version' helm/Chart.yaml)"
+
       - name: Push chart
         run: |
           OUTPUT="$(helm package helm/)"
           RELEASE="$(echo "${OUTPUT}" | sed -E 's/Successfully packaged chart and saved it to: (.+)/\1/')"
           helm s3 push --relative "${RELEASE}" "${REPOSITORY_NAME}"
-      - uses: peter-evans/create-pull-request@v4
+
+      - id: pull-request
+        name: Create pull-request
+        uses: peter-evans/create-pull-request@v4
         with:
           add-paths: |
             helm/Chart.yaml
           body: |
-            Chart version: ${{ github.event.inputs.chartVersion }}
+            Chart version: ${{ steps.semver.outputs.version }}
+
+      - uses: peter-evans/enable-pull-request-automerge@v2
+        name: Merge pull-request
+        if: steps.pull-request.outputs.pull-request-operation == 'created'
+        with:
+          pull-request-number: ${{steps.pull-request.outputs.pull-request-number}}
