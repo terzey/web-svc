@@ -44,7 +44,7 @@ jobs:
         run: helm repo add "${REPOSITORY_NAME}" "${REPOSITORY_URL}"
 
       - id: semver
-        name: Update helm/Chart.yaml
+        name: Bump helm/Chart.yaml and package.json semver
         run: |
           bash bin/bump-semver.sh helm/Chart.yaml "${{ github.event.inputs.bumpChartSemver }}" package.json "${{ github.event.inputs.bumpAppSemver }}"
           echo "::set-output chart-version=$(yq '.version' helm/Chart.yaml)"
