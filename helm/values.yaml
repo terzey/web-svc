@@ -1,6 +1,6 @@
 app:
   replicaCount: 1
-  image: terzey/web-svc:refactoring-2022-07-20T18-19-30
+  image: terzey/web-svc:refactoring-2022-07-21T17-05-08
   service:
     port: 3000
   limits:
