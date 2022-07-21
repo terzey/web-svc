@@ -57,9 +57,15 @@ jobs:
             helm/Chart.yaml
           body: |
             Chart version: ${{ steps.semver.outputs.version }}
+          labels: automerge
 
-      - uses: peter-evans/enable-pull-request-automerge@v2
+      - uses: pascalgn/automerge-action@v0.15.3
         name: Merge pull-request
-        with:
-          pull-request-number: ${{steps.pull-request.outputs.pull-request-number}}
-          token: ${{ secrets.TOKEN_GITHUB }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+
+#      - uses: peter-evans/enable-pull-request-automerge@v2
+#        name: Merge pull-request
+#        with:
+#          pull-request-number: ${{steps.pull-request.outputs.pull-request-number}}
+#          token: ${{ secrets.TOKEN_GITHUB }}
