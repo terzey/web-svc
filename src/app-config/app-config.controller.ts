@@ -2,11 +2,11 @@ import { Controller, Get } from '@nestjs/common';
 import { IVersion } from './types';
 import { AppConfigService } from './app-config.service';
 
-@Controller('app-config')
+@Controller('/self/version')
 export class AppConfigController {
   constructor(private appConfigService: AppConfigService) {}
 
-  @Get('/self/version')
+  @Get()
   getBuild(): IVersion {
     return this.appConfigService.getVersion();
   }
