@@ -59,3 +59,13 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+Fix transitive dependencies: [stackoverflow](https://stackoverflow.com/questions/56634474/npm-how-to-update-upgrade-transitive-dependencies)
+package.json
+```json
+"resolutions": {
+"terser": ">=5.14.2"
+}
+```
+```shell
+npx npm-force-resolutions 
+```
