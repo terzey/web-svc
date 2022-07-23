@@ -1,6 +1,6 @@
 app:
   replicaCount: 1
-  image: terzey/web-svc:main-2022-07-22T08-22-53
+  image: terzey/web-svc:add-alerting-rules-2022-07-23T13-25-17
   service:
     port: 3000
   limits:
@@ -31,4 +31,4 @@ mon:
       httpRequestDuration:
         thresholdSeconds: 1
         periodSeconds: 60
-        quantile: 0.95        # should be one of src/metrics/metrics.ts#L7
+        quantile: 0.95 # should be one of src/metrics/metrics.ts#L7
