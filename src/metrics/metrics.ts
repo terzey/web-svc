@@ -42,9 +42,9 @@ export const MemoryLimitBytes: MetricConfiguration<string> = {
   help: `Memory limit in bytes for ${APP_NAME}`,
 };
 
-export const MemoryPercents: MetricConfiguration<string> = {
-  name: `${PREFIX}_memory_percents`,
-  help: `Memory usage in percents for ${APP_NAME}`,
+export const MemoryUsageRatio: MetricConfiguration<string> = {
+  name: `${PREFIX}_memory_usage_ratio`,
+  help: `Memory usage in [0-1] for ${APP_NAME}`,
 };
 
 export const ProcessCpuSecondsTotal: MetricConfiguration<string> = {
@@ -57,7 +57,7 @@ export const ProcessCpuLimitSeconds: MetricConfiguration<string> = {
   help: `Limit for user and system CPU usage in seconds for ${APP_NAME}`,
 };
 
-export const ProcessCpuPercents: MetricConfiguration<string> = {
-  name: `${PREFIX}_process_cpu_percents`,
-  help: `User and system CPU usage in percents for ${APP_NAME}`,
+export const ProcessCpuUsageRatio: MetricConfiguration<string> = {
+  name: `${PREFIX}_process_cpu_usage_ratio`,
+  help: `User and system CPU usage in [0-1] for ${APP_NAME}`,
 };

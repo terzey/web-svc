@@ -17,7 +17,7 @@ bash bin/push-chart.sh
 ### Helm Chart Commands
 Deploy
 ```shell
-helm install --create-namespace --set mon.prometheus.installServiceMonitor=false app ./helm
+helm install --create-namespace --set mon.prometheus.install=true app ./helm
 ```
 Update
 ```shell

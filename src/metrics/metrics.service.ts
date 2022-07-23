@@ -6,9 +6,9 @@ import {
   HttpRequestDurationSeconds,
   MemoryLimitBytes,
   MemoryBytes,
-  MemoryPercents,
+  MemoryUsageRatio,
   ProcessCpuLimitSeconds,
-  ProcessCpuPercents,
+  ProcessCpuUsageRatio,
   ProcessCpuSecondsTotal,
   UptimeSeconds, HttpRequestCountTotal,
 } from './metrics';
@@ -34,16 +34,16 @@ export class MetricsService implements OnApplicationBootstrap {
     private build: Gauge<string>,
     @InjectMetric(MemoryBytes.name)
     private memoryBytes: Gauge<string>,
-    @InjectMetric(MemoryPercents.name)
-    private memoryPercents: Gauge<string>,
+    @InjectMetric(MemoryUsageRatio.name)
+    private memoryUsageRatio: Gauge<string>,
     @InjectMetric(MemoryLimitBytes.name)
     private memoryLimitBytes: Gauge<string>,
     @InjectMetric(ProcessCpuSecondsTotal.name)
     private processCpuSecondsTotal: Gauge<string>,
     @InjectMetric(ProcessCpuLimitSeconds.name)
     private processCpuLimitSeconds: Gauge<string>,
-    @InjectMetric(ProcessCpuPercents.name)
-    private processCpuPercents: Gauge<string>,
+    @InjectMetric(ProcessCpuUsageRatio.name)
+    private processCpuUsageRatio: Gauge<string>,
   ) {}
 
   private lastCpuTick: ICpuTick;
@@ -60,8 +60,8 @@ export class MetricsService implements OnApplicationBootstrap {
     this.uptime.set(uptime());
     const rssBytes = memoryUsage.rss();
     this.memoryBytes.set(rssBytes);
-    this.memoryPercents.set(
-      (100.0 * rssBytes) / this.appConfigService.getMemoryLimitBytes(),
+    this.memoryUsageRatio.set(
+      rssBytes / this.appConfigService.getMemoryLimitBytes(),
     );
     const { user, system } = cpuUsage();
     const timeNanoseconds = hrtime.bigint();
@@ -76,7 +76,7 @@ export class MetricsService implements OnApplicationBootstrap {
         cpuDurationMicroseconds /
         timeDurationMicroseconds /
         (this.appConfigService.getCpuLimitMilliseconds() / 1000);
-      this.processCpuPercents.set(100 * cpuUsage);
+      this.processCpuUsageRatio.set(cpuUsage);
     }
     this.processCpuSecondsTotal.set(cpuTimeMicroseconds * 1e-6);
     this.lastCpuTick = {

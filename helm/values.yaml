@@ -14,4 +14,21 @@ infra:
     - regcred
 mon:
   prometheus:
-    installServiceMonitor: true
+    install: true
+    alerting:
+      memoryUsage:
+        thresholdRatio: 0.8
+        periodSeconds: 30
+      cpuUsage:
+        thresholdRatio: 0.9
+        periodSeconds: 30
+      eventloopLag:
+        thresholdSeconds: 0.1
+        periodSeconds: 10
+      cpuCfsThrottled:
+        thresholdRatio: 0.1
+        periodSeconds: 30
+      httpRequestDuration:
+        thresholdSeconds: 1
+        periodSeconds: 60
+        quantile: 0.95        # should be one of src/metrics/metrics.ts#L7
