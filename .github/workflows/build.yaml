@@ -23,4 +23,4 @@ jobs:
       - name: test
         run: npm run test
       - name: build
-        run: docker build . --file Dockerfile --tag "${IMAGE_NAME}"
+        run: npm run build
