@@ -47,8 +47,8 @@ jobs:
         name: Bump helm/Chart.yaml and package.json semver
         run: |
           bash bin/bump-semver.sh helm/Chart.yaml "${{ github.event.inputs.bumpChartSemver }}" package.json "${{ github.event.inputs.bumpAppSemver }}"
-          echo "::set-output chart-version=$(yq '.version' helm/Chart.yaml)"
-          echo "::set-output app-version=$(jq '.version' package.json)"
+          echo "::set-output chart_version=$(yq '.version' helm/Chart.yaml)"
+          echo "::set-output app_version=$(jq '.version' package.json)"
 
       - name: Docker login
         run: docker login --username terzey --password "${DOCKER_PASSWORD}"
@@ -83,8 +83,8 @@ jobs:
           body: |
             Pushed docker image: ${{ steps.docker-image.outputs.docker_image }}
             Size: ${{ steps.docker-image.outputs.docker_image_size }} bytes
-            Chart version: ${{ steps.semver.outputs.chart-version }}
-            Application version: ${{ steps.semver.outputs.app-version }}
+            Chart version: ${{ steps.semver.outputs.chart_version }}
+            Application version: ${{ steps.semver.outputs.app_version }}
 
       - uses: pascalgn/automerge-action@v0.15.3
         name: Merge pull-request
