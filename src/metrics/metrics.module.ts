@@ -7,7 +7,6 @@ import {
   PrometheusModule,
 } from '@willsoto/nestjs-prometheus';
 import {
-  APP_NAME,
   Build,
   HttpRequestDurationSeconds,
   HttpRequestCountTotal,

@@ -10,7 +10,8 @@ import {
   ProcessCpuLimitSeconds,
   ProcessCpuUsageRatio,
   ProcessCpuSecondsTotal,
-  UptimeSeconds, HttpRequestCountTotal,
+  UptimeSeconds,
+  HttpRequestCountTotal,
 } from './metrics';
 import { AppConfigService } from '../app-config/app-config.service';
 import { uptime, memoryUsage, cpuUsage, hrtime } from 'node:process';
