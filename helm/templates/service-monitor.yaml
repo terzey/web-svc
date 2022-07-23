@@ -1,4 +1,4 @@
-{{ if .Values.mon.prometheus.installServiceMonitor -}}
+{{ if .Values.mon.prometheus.install -}}
 {{ $Name := printf "%s-%s" .Release.Name .Chart.Name }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor

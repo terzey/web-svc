@@ -7,15 +7,14 @@ import {
   PrometheusModule,
 } from '@willsoto/nestjs-prometheus';
 import {
-  APP_NAME,
   Build,
   HttpRequestDurationSeconds,
   HttpRequestCountTotal,
   MemoryLimitBytes,
   MemoryBytes,
-  MemoryPercents,
+  MemoryUsageRatio,
   ProcessCpuLimitSeconds,
-  ProcessCpuPercents,
+  ProcessCpuUsageRatio,
   ProcessCpuSecondsTotal,
   UptimeSeconds,
 } from './metrics';
@@ -31,9 +30,7 @@ import { AppConfigService } from '../app-config/app-config.service';
       defaultMetrics: {
         enabled: true,
       },
-      defaultLabels: {
-        component: APP_NAME,
-      },
+      defaultLabels: {},
     }),
     AppConfigModule,
     ConfigModule,
@@ -47,10 +44,10 @@ import { AppConfigService } from '../app-config/app-config.service';
     makeGaugeProvider(Build),
     makeGaugeProvider(MemoryBytes),
     makeGaugeProvider(MemoryLimitBytes),
-    makeGaugeProvider(MemoryPercents),
+    makeGaugeProvider(MemoryUsageRatio),
     makeGaugeProvider(ProcessCpuSecondsTotal),
     makeGaugeProvider(ProcessCpuLimitSeconds),
-    makeGaugeProvider(ProcessCpuPercents),
+    makeGaugeProvider(ProcessCpuUsageRatio),
   ],
   exports: [MetricsService],
   controllers: [MetricsController],
