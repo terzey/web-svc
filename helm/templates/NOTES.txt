@@ -3,4 +3,9 @@ You have successfully installed "{{ .Release.Name }}" into "{{ .Release.Namespac
 To access app please run
 kubectl port-forward svc/{{ .Release.Name }}-{{ .Chart.Name }} -n {{ .Release.Namespace }} 3000
 Once done, navigate to http://localhost:3000/self/version
+{{ if .Values.mon.prometheus.install }}
+Metrics are collected by Prometheus. To expose Prometheus please run:
+kubectl --namespace monitoring port-forward svc/prometheus-k8s 9090
+Once done, navigate to http://localhost:9090/alerts?search=WebSvc
+{{- end }}
 -----------------------------------------------------------------------------------

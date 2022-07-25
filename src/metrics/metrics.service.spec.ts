@@ -16,6 +16,7 @@ import {
   ProcessCpuSecondsTotal,
   UptimeSeconds,
   HttpRequestCountTotal,
+  Watchdog,
 } from './metrics';
 import { AppConfigService } from '../app-config/app-config.service';
 import { ConfigService } from '@nestjs/config';
@@ -39,6 +40,7 @@ describe('MetricsService', () => {
         makeGaugeProvider(ProcessCpuSecondsTotal),
         makeGaugeProvider(ProcessCpuLimitSeconds),
         makeGaugeProvider(ProcessCpuUsageRatio),
+        makeGaugeProvider(Watchdog),
       ],
     }).compile();
 

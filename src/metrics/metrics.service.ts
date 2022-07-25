@@ -1,7 +1,12 @@
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  OnApplicationBootstrap,
+} from '@nestjs/common';
 import { InjectMetric } from '@willsoto/nestjs-prometheus';
 import { Counter, Gauge, LabelValues, Summary } from 'prom-client';
 import {
+  PREFIX,
   Build,
   HttpRequestDurationSeconds,
   MemoryLimitBytes,
@@ -12,6 +17,7 @@ import {
   ProcessCpuSecondsTotal,
   UptimeSeconds,
   HttpRequestCountTotal,
+  Watchdog,
 } from './metrics';
 import { AppConfigService } from '../app-config/app-config.service';
 import { uptime, memoryUsage, cpuUsage, hrtime } from 'node:process';
@@ -20,6 +26,14 @@ interface ICpuTick {
   timeNanoseconds: bigint;
   cpuTimeMicroseconds: number;
 }
+
+export enum WatchdogValue {
+  Off = 0,
+  On = 1,
+}
+
+const watchdogRegexp = new RegExp(`^\\s*${PREFIX}_watchdog\\s+([01])\\s*$`);
+const commentLineRegexp = new RegExp(`^\\s*#.*$`);
 
 @Injectable()
 export class MetricsService implements OnApplicationBootstrap {
@@ -45,9 +59,12 @@ export class MetricsService implements OnApplicationBootstrap {
     private processCpuLimitSeconds: Gauge<string>,
     @InjectMetric(ProcessCpuUsageRatio.name)
     private processCpuUsageRatio: Gauge<string>,
+    @InjectMetric(Watchdog.name)
+    private watchdog: Gauge<string>,
   ) {}
 
   private lastCpuTick: ICpuTick;
+  private watchdogValue: WatchdogValue;
 
   httpRequestStartTimer(): (labels?: LabelValues<string>) => void {
     return this.httpRequestDuration.startTimer();
@@ -55,6 +72,29 @@ export class MetricsService implements OnApplicationBootstrap {
 
   getHttpRequestCountTotal(): Counter<string> {
     return this.httpRequestCountTotal;
+  }
+
+  setMetrics(value: string): boolean {
+    let watchdogValue = this.watchdogValue;
+    if (!value) {
+      return false;
+    }
+    value.split('\n').forEach((line) => {
+      if (line.match(commentLineRegexp)) {
+        return;
+      }
+      const match = line.match(watchdogRegexp);
+      if (!match) {
+        throw new BadRequestException(`Failed to parse metric: "${line}"`);
+      }
+      watchdogValue = parseInt(match[1], 10);
+    });
+    const modified = watchdogValue !== this.watchdogValue;
+    if (modified) {
+      this.watchdogValue = watchdogValue;
+      this.watchdog.set(watchdogValue);
+    }
+    return modified;
   }
 
   observeCustomMetrics() {
@@ -94,5 +134,7 @@ export class MetricsService implements OnApplicationBootstrap {
     this.processCpuLimitSeconds.set(
       this.appConfigService.getCpuLimitMilliseconds() * 1e-3,
     );
+    this.watchdogValue = WatchdogValue.Off;
+    this.watchdog.set(this.watchdogValue);
   }
 }

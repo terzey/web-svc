@@ -22,6 +22,6 @@ USER appuser
 
 EXPOSE 3000
 STOPSIGNAL SIGINT
-
+ENV NODE_ENV=production
 WORKDIR /app
 CMD ["node", "src/main.js"]
