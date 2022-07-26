@@ -1,6 +1,6 @@
 app:
   replicaCount: 1
-  image: terzey/web-svc:add-alerting-notifications-2022-07-25T15-53-44
+  image: terzey/web-svc:main-2022-07-26T08-22-38
   service:
     port: 3000
   limits:
