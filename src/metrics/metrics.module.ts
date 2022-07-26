@@ -17,6 +17,7 @@ import {
   ProcessCpuUsageRatio,
   ProcessCpuSecondsTotal,
   UptimeSeconds,
+  Watchdog,
 } from './metrics';
 import { MetricsController } from './metrics.controller';
 import { AppConfigModule } from '../app-config/app-config.module';
@@ -48,6 +49,7 @@ import { AppConfigService } from '../app-config/app-config.service';
     makeGaugeProvider(ProcessCpuSecondsTotal),
     makeGaugeProvider(ProcessCpuLimitSeconds),
     makeGaugeProvider(ProcessCpuUsageRatio),
+    makeGaugeProvider(Watchdog),
   ],
   exports: [MetricsService],
   controllers: [MetricsController],

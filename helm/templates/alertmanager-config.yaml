@@ -1,0 +1,52 @@
+{{ if .Values.mon.alertmanager.install -}}
+{{ $Name := printf "%s-%s" .Release.Name .Chart.Name }}
+{{ $Config := .Values.mon.alertmanager.config }}
+# https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/user-guides/alerting.md
+# https://doc.crds.dev/github.com/prometheus-operator/kube-prometheus/monitoring.coreos.com/AlertmanagerConfig/v1alpha1@v0.7.0
+# https://prometheus-operator.dev/docs/operator/api/#monitoring.coreos.com/v1alpha1.AlertmanagerConfigSpec
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: {{ $Name }}-alertmanager-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- range $key, $value := $Config.matchLabels}}
+    {{ $key }}: '{{ $value }}'
+    {{- end}}
+spec:
+  route:
+    groupBy: ['job']
+    groupWait: {{ $Config.groupWait }}
+    groupInterval: {{ $Config.groupInterval }}
+    repeatInterval: {{ $Config.repeatInterval }}
+    receiver: {{ $Name }}-slack
+    matchers:
+      - name: app
+        value: {{ $Name }}
+      - name: severity
+        value: page
+  receivers:
+    - name: {{ $Name }}-slack
+      slackConfigs:
+        - apiURL:
+            name: {{ $Name }}-slack-url
+            key: address
+          title: '{{ `[{{ .Status | toUpper }}:{{ len .Alerts }}] {{ (index .Alerts 0).Annotations.summary}}` }}'
+          text: |-
+            *Description:*
+            {{ `{{ (index .Alerts 0).Annotations.description}}` }}
+
+            *Container(s):*
+            {{`{{- range .Alerts }}`}}
+            {{`{{ .Annotations.container }}`}}
+            {{`{{- end }}`}}
+          sendResolved: true
+---
+apiVersion: v1
+data:
+  address: {{ $Config.slackSecretAddress }}
+kind: Secret
+metadata:
+  name: {{ $Name }}-slack-url
+  namespace: {{ .Release.Namespace }}
+{{- end }}

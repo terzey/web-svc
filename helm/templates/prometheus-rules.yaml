@@ -1,0 +1,97 @@
+{{ if .Values.mon.prometheus.install -}}
+{{ $Name := printf "%s-%s" .Release.Name .Chart.Name }}
+{{ $Alerting := .Values.mon.prometheus.alerting }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: {{ $Name }}
+    role: alert-rules
+  name: {{ $Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  groups:
+    - name: {{ $Name }}
+      rules:
+        - alert: WebSvcMemoryUsage
+          expr: web_svc_memory_usage_ratio{job="{{ $Name }}"} > {{ $Alerting.memoryUsage.thresholdRatio }}
+          for: {{ $Alerting.memoryUsage.periodSeconds }}s
+          labels:
+            severity: page
+            app: {{ $Name }}
+          annotations:
+            summary: Instance(s) of {{`{{`}} $labels.job {{`}}`}} high memory usage
+            description: |-
+              Instance(s) of *{{`{{`}} $labels.job {{`}}`}}* has(ve) moderately high memory usage for more than {{ $Alerting.memoryUsage.periodSeconds }} seconds.
+              Please contact development team to investigate service logs.
+            container: '{{`{{ $labels.instance }}`}}'
+
+        - alert: WebSvcNodejsEventloopLag
+          expr: nodejs_eventloop_lag_seconds{job="{{ $Name }}"} > {{ $Alerting.eventloopLag.thresholdSeconds }}
+          for: {{ $Alerting.eventloopLag.periodSeconds }}s
+          labels:
+            severity: page
+            app: {{ $Name }}
+          annotations:
+            summary: Instance(s) of {{`{{`}} $labels.job {{`}}`}} high nodejs eventloop lag
+            description: |-
+              Instance(s) of *{{`{{`}} $labels.job {{`}}`}}* has(ve) moderately high eventloop lag  for more than {{ $Alerting.eventloopLag.periodSeconds }} seconds.
+              Please contact DevOPS engineers to investigate container metrics.
+            container: '{{`{{ $labels.instance }}`}}'
+
+        - alert: WebSvcProcessCpuUsage
+          expr: web_svc_process_cpu_usage_ratio{job="{{ $Name }}"} > {{ $Alerting.cpuUsage.thresholdRatio }}
+          for: {{ $Alerting.cpuUsage.periodSeconds }}s
+          labels:
+            severity: page
+            app: {{ $Name }}
+          annotations:
+            summary: Instance(s) of {{`{{`}} $labels.job {{`}}`}} high process CPU usage
+            description: |-
+              Instance(s) of *{{`{{`}} $labels.job {{`}}`}}* has(ve) moderately high CPU usage for more than {{ $Alerting.cpuUsage.periodSeconds }} seconds.
+              Please contact DevOPS engineers to investigate container metrics.
+            container: '{{`{{ $labels.instance }}`}}'
+
+        - alert: WebSvcCpuCfsThrottled
+          expr: increase(container_cpu_cfs_throttled_periods_total{pod=~"{{$Name}}.*"}[{{ $Alerting.cpuCfsThrottled.periodSeconds }}s])/increase(container_cpu_cfs_periods_total{pod=~"{{$Name}}.*"}[{{ $Alerting.cpuCfsThrottled.periodSeconds }}s]) > {{ $Alerting.cpuCfsThrottled.thresholdRatio }}
+          for: {{ $Alerting.cpuCfsThrottled.periodSeconds }}s
+          labels:
+            severity: page
+            app: {{ $Name }}
+          annotations:
+            summary: Instance(s) of {{`{{`}} $labels.job {{`}}`}} ontainer CPU CFS throttled
+            description: |-
+              Instance(s) of *{{`{{`}} $labels.job {{`}}`}}* has(ve) moderately high container CPU CFS throttled for more than {{ $Alerting.cpuUsage.periodSeconds }} seconds.
+              Please contact DevOPS engineers to investigate container metrics.
+            container: '{{`{{ $labels.instance }}`}}'
+
+        - alert: WebSvcHttpRequestDuration
+          expr: web_svc_http_request_duration_seconds{job="{{ $Name }}",quantile="{{ $Alerting.httpRequestDuration.quantile }}"} > {{ $Alerting.httpRequestDuration.thresholdSeconds }}
+          for: {{ $Alerting.httpRequestDuration.periodSeconds }}s
+          labels:
+            severity: page
+            app: {{ $Name }}
+          annotations:
+            summary: Instance(s) of {{`{{`}} $labels.job {{`}}`}} http request duration
+            description: |-
+              Instance(s) of *{{`{{`}} $labels.job {{`}}`}}* has(ve) moderately high HTTP request duration for more than {{ $Alerting.httpRequestDuration.periodSeconds }} seconds.
+              Please contact development team to investigate service logs.
+            container: '{{`{{ $labels.instance }}`}}'
+
+        - alert: WebSvcWachdog
+          expr: web_svc_watchdog{job="{{ $Name }}"} == 1
+          for: 1s
+          labels:
+            severity: page
+            app: {{ $Name }}
+          annotations:
+            summary: Watchdog set on {{`{{ $labels.job }}`}}
+            description: |-
+              This is an alert meant to ensure that the entire alerting pipeline is functional.
+              To clear alert send HTTP request:
+              ```curl -X POST http://<contaiter-ip>:<container-port>/self/metrics -H "Content-Type: text/plain" -d "web_svc_watchdog 0"```
+              To set alert send HTTP request:
+              ```curl -X POST http://<contaiter-ip>:<container-port>/self/metrics -H "Content-Type: text/plain" -d "web_svc_watchdog 1"```
+              <contaiter-ip>:<container-port> are listed below.
+            container: '{{`{{ $labels.instance }}`}}'
+{{- end }}

@@ -61,3 +61,8 @@ export const ProcessCpuUsageRatio: MetricConfiguration<string> = {
   name: `${PREFIX}_process_cpu_usage_ratio`,
   help: `User and system CPU usage in [0-1] for ${APP_NAME}`,
 };
+
+export const Watchdog: MetricConfiguration<string> = {
+  name: `${PREFIX}_watchdog`,
+  help: `This is an alert meant to ensure that the entire alerting pipeline is functional for ${APP_NAME}`,
+};

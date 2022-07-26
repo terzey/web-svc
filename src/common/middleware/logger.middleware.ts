@@ -14,7 +14,7 @@ export class LoggerMiddleware implements NestMiddleware {
     const { ip, method, originalUrl } = req;
     res.on('finish', () => {
       const { statusCode, statusMessage } = res;
-      const contentLength = res.get('content-length');
+      const contentLength = res.get('Content-Length') || 0;
       const diff = hrtime(startAt);
       const responseTime = (diff[0] * 1e3 + diff[1] * 1e-6).toPrecision(3);
       this.logger.log(
