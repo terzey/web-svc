@@ -24,7 +24,8 @@ spec:
             description: |-
               Instance(s) of *{{`{{`}} $labels.job {{`}}`}}* has(ve) moderately high memory usage for more than {{ $Alerting.memoryUsage.periodSeconds }} seconds.
               Please contact development team to investigate service logs.
-            container: '{{`{{ $labels.instance }}`}}'
+            instance: '{{`{{ $labels.instance }}`}}'
+            pod: '{{`{{ $labels.pod }}`}}'
 
         - alert: WebSvcNodejsEventloopLag
           expr: nodejs_eventloop_lag_seconds{job="{{ $Name }}"} > {{ $Alerting.eventloopLag.thresholdSeconds }}
@@ -37,7 +38,8 @@ spec:
             description: |-
               Instance(s) of *{{`{{`}} $labels.job {{`}}`}}* has(ve) moderately high eventloop lag  for more than {{ $Alerting.eventloopLag.periodSeconds }} seconds.
               Please contact DevOPS engineers to investigate container metrics.
-            container: '{{`{{ $labels.instance }}`}}'
+            instance: '{{`{{ $labels.instance }}`}}'
+            pod: '{{`{{ $labels.pod }}`}}'
 
         - alert: WebSvcProcessCpuUsage
           expr: web_svc_process_cpu_usage_ratio{job="{{ $Name }}"} > {{ $Alerting.cpuUsage.thresholdRatio }}
@@ -50,7 +52,8 @@ spec:
             description: |-
               Instance(s) of *{{`{{`}} $labels.job {{`}}`}}* has(ve) moderately high CPU usage for more than {{ $Alerting.cpuUsage.periodSeconds }} seconds.
               Please contact DevOPS engineers to investigate container metrics.
-            container: '{{`{{ $labels.instance }}`}}'
+            instance: '{{`{{ $labels.instance }}`}}'
+            pod: '{{`{{ $labels.pod }}`}}'
 
         - alert: WebSvcCpuCfsThrottled
           expr: increase(container_cpu_cfs_throttled_periods_total{pod=~"{{$Name}}.*"}[{{ $Alerting.cpuCfsThrottled.periodSeconds }}s])/increase(container_cpu_cfs_periods_total{pod=~"{{$Name}}.*"}[{{ $Alerting.cpuCfsThrottled.periodSeconds }}s]) > {{ $Alerting.cpuCfsThrottled.thresholdRatio }}
@@ -59,11 +62,12 @@ spec:
             severity: page
             app: {{ $Name }}
           annotations:
-            summary: Instance(s) of {{`{{`}} $labels.job {{`}}`}} ontainer CPU CFS throttled
+            summary: Instance(s) of {{`{{`}} $labels.app {{`}}`}} ontainer CPU CFS throttled
             description: |-
-              Instance(s) of *{{`{{`}} $labels.job {{`}}`}}* has(ve) moderately high container CPU CFS throttled for more than {{ $Alerting.cpuUsage.periodSeconds }} seconds.
+              Instance(s) of *{{`{{`}} $labels.app {{`}}`}}* has(ve) moderately high container CPU CFS throttled for more than {{ $Alerting.cpuUsage.periodSeconds }} seconds.
               Please contact DevOPS engineers to investigate container metrics.
-            container: '{{`{{ $labels.instance }}`}}'
+            instance: '{{`{{ $labels.instance }}`}}'
+            pod: '{{`{{ $labels.pod }}`}}'
 
         - alert: WebSvcHttpRequestDuration
           expr: web_svc_http_request_duration_seconds{job="{{ $Name }}",quantile="{{ $Alerting.httpRequestDuration.quantile }}"} > {{ $Alerting.httpRequestDuration.thresholdSeconds }}
@@ -76,7 +80,8 @@ spec:
             description: |-
               Instance(s) of *{{`{{`}} $labels.job {{`}}`}}* has(ve) moderately high HTTP request duration for more than {{ $Alerting.httpRequestDuration.periodSeconds }} seconds.
               Please contact development team to investigate service logs.
-            container: '{{`{{ $labels.instance }}`}}'
+            instance: '{{`{{ $labels.instance }}`}}'
+            pod: '{{`{{ $labels.pod }}`}}'
 
         - alert: WebSvcWachdog
           expr: web_svc_watchdog{job="{{ $Name }}"} == 1
@@ -88,10 +93,11 @@ spec:
             summary: Watchdog set on {{`{{ $labels.job }}`}}
             description: |-
               This is an alert meant to ensure that the entire alerting pipeline is functional.
-              To clear alert send HTTP request:
+              To clear the alert send HTTP request:
               ```curl -X POST http://<contaiter-ip>:<container-port>/self/metrics -H "Content-Type: text/plain" -d "web_svc_watchdog 0"```
-              To set alert send HTTP request:
+              To set the alert send HTTP request:
               ```curl -X POST http://<contaiter-ip>:<container-port>/self/metrics -H "Content-Type: text/plain" -d "web_svc_watchdog 1"```
-              <contaiter-ip>:<container-port> are listed below.
-            container: '{{`{{ $labels.instance }}`}}'
+              Affected pod(s) is(are) listed below.
+            instance: '{{`{{ $labels.instance }}`}}'
+            pod: '{{`{{ $labels.pod }}`}}'
 {{- end }}

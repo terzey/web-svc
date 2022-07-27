@@ -31,14 +31,14 @@ spec:
         - apiURL:
             name: {{ $Name }}-slack-url
             key: address
-          title: '{{ `[{{ .Status | toUpper }}:{{ len .Alerts }}] {{ (index .Alerts 0).Annotations.summary}}` }}'
+          title: '{{ `[{{ .Status | toUpper }}:{{ .Alerts | len }}] {{ (index .Alerts 0).Annotations.summary}}` }}'
           text: |-
             *Description:*
             {{ `{{ (index .Alerts 0).Annotations.description}}` }}
 
-            *Container(s):*
+            *Pod(s):*
             {{`{{- range .Alerts }}`}}
-            {{`{{ .Annotations.container }}`}}
+            {{`*{{ .Annotations.pod }}/{{ .Annotations.instance }}* fired {{ .StartsAt.UTC.Format "02-Jan-2006 15:04:05" }} {{ if eq .Status "resolved" }} resolved {{ .EndsAt.UTC.Format "02-Jan-2006 15:04:05" }} duration {{ .EndsAt.Sub .StartsAt }} {{ end }}`}}
             {{`{{- end }}`}}
           sendResolved: true
 ---

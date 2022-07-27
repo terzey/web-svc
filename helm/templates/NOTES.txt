@@ -8,4 +8,9 @@ Metrics are collected by Prometheus. To expose Prometheus please run:
 kubectl --namespace monitoring port-forward svc/prometheus-k8s 9090
 Once done, navigate to http://localhost:9090/alerts?search=WebSvc
 {{- end }}
+{{ if .Values.mon.alertmanager.install }}
+Alertmanager is configured to send alerts to slack. To expose Alertmanager please run:
+kubectl --namespace monitoring port-forward svc/alertmanager-main 9093
+Once done, navigate to http://localhost:9093/#/alerts
+{{- end }}
 -----------------------------------------------------------------------------------
