@@ -1,0 +1,12 @@
+# {{ if .Values.mon.grafana.install -}}
+# {{ $Name := printf "%s-%s" .Release.Name .Chart.Name }}
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: {{ $Name }}
+  labels:
+    app: grafana
+spec:
+  json: |-
+  {{- include "dashboard.json" . | indent 4 }}
+# {{- end }}
