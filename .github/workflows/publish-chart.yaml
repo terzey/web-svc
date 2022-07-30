@@ -37,6 +37,11 @@ jobs:
       - name: Add repo
         run: helm repo add "${REPOSITORY_NAME}" "${REPOSITORY_URL}"
 
+      - name: Install Jsonnet
+        run: |
+          apt install -y jsonnet
+          apt install -y jsonnet-bundler
+
       - id: semver
         name: Bump helm/Chart.yaml semver
         run: |
