@@ -36,8 +36,8 @@ jobs:
 
       - name: Install Jsonnet
         run: |
-          apt install -y jsonnet
-          apt install -y jsonnet-bundler
+          sudo apt install -y jsonnet
+          sudo apt install -y jsonnet-bundler
 
       - name: Install helm
         run: |
