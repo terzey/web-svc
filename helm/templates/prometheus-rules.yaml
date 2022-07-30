@@ -1,24 +1,23 @@
 {{ if .Values.mon.prometheus.install -}}
-{{ $Name := printf "%s-%s" .Release.Name .Chart.Name }}
 {{ $Alerting := .Values.mon.prometheus.alerting }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   labels:
-    prometheus: {{ $Name }}
+    prometheus: {{ include "name" . }}
     role: alert-rules
-  name: {{ $Name }}
+  name: {{ include "name" . }}
   namespace: {{ .Release.Namespace }}
 spec:
   groups:
-    - name: {{ $Name }}
+    - name: {{ include "name" . }}
       rules:
         - alert: WebSvcMemoryUsage
-          expr: web_svc_memory_usage_ratio{job="{{ $Name }}"} > {{ $Alerting.memoryUsage.thresholdRatio }}
+          expr: web_svc_memory_usage_ratio{job="{{ include "name" . }}"} > {{ $Alerting.memoryUsage.thresholdRatio }}
           for: {{ $Alerting.memoryUsage.periodSeconds }}s
           labels:
             severity: page
-            app: {{ $Name }}
+            app: {{ include "name" . }}
           annotations:
             summary: Instance(s) of {{`{{`}} $labels.job {{`}}`}} high memory usage
             description: |-
@@ -28,11 +27,11 @@ spec:
             pod: '{{`{{ $labels.pod }}`}}'
 
         - alert: WebSvcNodejsEventloopLag
-          expr: nodejs_eventloop_lag_seconds{job="{{ $Name }}"} > {{ $Alerting.eventloopLag.thresholdSeconds }}
+          expr: nodejs_eventloop_lag_seconds{job="{{ include "name" . }}"} > {{ $Alerting.eventloopLag.thresholdSeconds }}
           for: {{ $Alerting.eventloopLag.periodSeconds }}s
           labels:
             severity: page
-            app: {{ $Name }}
+            app: {{ include "name" . }}
           annotations:
             summary: Instance(s) of {{`{{`}} $labels.job {{`}}`}} high nodejs eventloop lag
             description: |-
@@ -42,11 +41,11 @@ spec:
             pod: '{{`{{ $labels.pod }}`}}'
 
         - alert: WebSvcProcessCpuUsage
-          expr: web_svc_process_cpu_usage_ratio{job="{{ $Name }}"} > {{ $Alerting.cpuUsage.thresholdRatio }}
+          expr: web_svc_process_cpu_usage_ratio{job="{{ include "name" . }}"} > {{ $Alerting.cpuUsage.thresholdRatio }}
           for: {{ $Alerting.cpuUsage.periodSeconds }}s
           labels:
             severity: page
-            app: {{ $Name }}
+            app: {{ include "name" . }}
           annotations:
             summary: Instance(s) of {{`{{`}} $labels.job {{`}}`}} high process CPU usage
             description: |-
@@ -56,11 +55,11 @@ spec:
             pod: '{{`{{ $labels.pod }}`}}'
 
         - alert: WebSvcCpuCfsThrottled
-          expr: increase(container_cpu_cfs_throttled_periods_total{pod=~"{{$Name}}.*"}[{{ $Alerting.cpuCfsThrottled.periodSeconds }}s])/increase(container_cpu_cfs_periods_total{pod=~"{{$Name}}.*"}[{{ $Alerting.cpuCfsThrottled.periodSeconds }}s]) > {{ $Alerting.cpuCfsThrottled.thresholdRatio }}
+          expr: increase(container_cpu_cfs_throttled_periods_total{pod=~"{{ include "name" . }}.*"}[{{ $Alerting.cpuCfsThrottled.periodSeconds }}s])/increase(container_cpu_cfs_periods_total{pod=~"{{ include "name" . }}.*"}[{{ $Alerting.cpuCfsThrottled.periodSeconds }}s]) > {{ $Alerting.cpuCfsThrottled.thresholdRatio }}
           for: {{ $Alerting.cpuCfsThrottled.periodSeconds }}s
           labels:
             severity: page
-            app: {{ $Name }}
+            app: {{ include "name" . }}
           annotations:
             summary: Instance(s) of {{`{{`}} $labels.app {{`}}`}} ontainer CPU CFS throttled
             description: |-
@@ -70,11 +69,11 @@ spec:
             pod: '{{`{{ $labels.pod }}`}}'
 
         - alert: WebSvcHttpRequestDuration
-          expr: web_svc_http_request_duration_seconds{job="{{ $Name }}",quantile="{{ $Alerting.httpRequestDuration.quantile }}"} > {{ $Alerting.httpRequestDuration.thresholdSeconds }}
+          expr: web_svc_http_request_duration_seconds{job="{{ include "name" . }}",quantile="{{ $Alerting.httpRequestDuration.quantile }}"} > {{ $Alerting.httpRequestDuration.thresholdSeconds }}
           for: {{ $Alerting.httpRequestDuration.periodSeconds }}s
           labels:
             severity: page
-            app: {{ $Name }}
+            app: {{ include "name" . }}
           annotations:
             summary: Instance(s) of {{`{{`}} $labels.job {{`}}`}} http request duration
             description: |-
@@ -84,11 +83,11 @@ spec:
             pod: '{{`{{ $labels.pod }}`}}'
 
         - alert: WebSvcWachdog
-          expr: web_svc_watchdog{job="{{ $Name }}"} == 1
+          expr: web_svc_watchdog{job="{{ include "name" . }}"} == 1
           for: 1s
           labels:
             severity: page
-            app: {{ $Name }}
+            app: {{ include "name" . }}
           annotations:
             summary: Watchdog set on {{`{{ $labels.job }}`}}
             description: |-

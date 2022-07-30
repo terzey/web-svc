@@ -1,12 +1,11 @@
 {{ if .Values.mon.prometheus.install -}}
-{{ $Name := printf "%s-%s" .Release.Name .Chart.Name }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ $Name }}
+  name: {{ include "name" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    instance: {{ $Name }}
+    instance: {{ include "name" . }}
     version: {{ .Chart.Version }}
 spec:
   namespaceSelector:
@@ -14,7 +13,7 @@ spec:
       - {{ .Release.Namespace }}
   selector:
     matchLabels:
-      app: {{ $Name }}
+      app: {{ include "name" . }}
   endpoints:
     - port: http
       path: /self/metrics

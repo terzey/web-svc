@@ -1,11 +1,10 @@
-{{ $Name := printf "%s-%s" .Release.Name .Chart.Name }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ $Name }}
+  name: {{ include "name" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ $Name }}
+    app: {{ include "name" . }}
 spec:
   clusterIP: None
   ports:
@@ -14,4 +13,4 @@ spec:
       targetPort: 3000
       protocol: TCP
   selector:
-    app: {{ $Name }}
+    app: {{ include "name" . }}

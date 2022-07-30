@@ -1,18 +1,17 @@
-{{ $Name := printf "%s-%s" .Release.Name .Chart.Name }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ $Name }}
+  name: {{ include "name" . }}
   namespace: {{ .Release.Namespace }}
 spec:
   replicas: {{ .Values.app.replicaCount }}
   selector:
     matchLabels:
-      app: {{ $Name }}
+      app: {{ include "name" . }}
   template:
     metadata:
       labels:
-        app: {{ $Name }}
+        app: {{ include "name" . }}
     spec:
       imagePullSecrets:{{- range .Values.infra.imagePullSecrets }}
         - name: {{.}}{{- end }}

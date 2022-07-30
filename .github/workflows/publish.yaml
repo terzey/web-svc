@@ -34,6 +34,11 @@ jobs:
           wget -qO yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
           chmod +x yq
 
+      - name: Install Jsonnet
+        run: |
+          apt install -y jsonnet
+          apt install -y jsonnet-bundler
+
       - name: Install helm
         run: |
           wget -qO get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3

@@ -33,4 +33,7 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-/bin/.env.sh
+bin/.env.sh
+grafana/grafonnet-lib
+helm/templates/grafana/_dashboard.json.tpl
+vendor/
