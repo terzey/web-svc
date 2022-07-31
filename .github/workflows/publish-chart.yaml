@@ -50,7 +50,7 @@ jobs:
         name: Bump helm/Chart.yaml semver
         run: |
           bash bin/bump-semver.sh helm/Chart.yaml "${{ github.event.inputs.bumpChartSemver }}"
-          echo "::set-output version=$(yq '.version' helm/Chart.yaml)"
+          echo "::set-output name=version::$(yq '.version' helm/Chart.yaml)"
 
       - name: Push chart
         run: |
