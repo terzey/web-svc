@@ -34,3 +34,4 @@ dashboard.new(
 # row 4, y = 20
 .addPanel(httpRequestDuration.getPanel(job, component, datasource), gridPos = { x: 0, y: 20, w: 12, h: 8 })
 .addPanel(nodejsEventloopLag.getPanel(job, component, datasource), gridPos = { x: 12, y: 20, w: 12, h: 8 })
+# row 5, y = 28
