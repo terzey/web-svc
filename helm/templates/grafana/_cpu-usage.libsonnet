@@ -1,7 +1,3 @@
-local grafana = import 'grafonnet/grafana.libsonnet';
-local prometheus = grafana.prometheus;
-local graph = grafana.graphPanel;
-
 {
   getPanel(job, component, datasource)::
     {

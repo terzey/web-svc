@@ -1,10 +1,10 @@
 {
   getPanel(job, component, datasource)::
     {
-      title: 'Memory Usage',
+      title: 'Nodejs Eventloop Lag, 0.9 Quantile',
       type: 'timeseries',
       targets: [{
-        expr: 'web_svc_memory_usage_ratio{job="' + job + '"}',
+        expr: 'nodejs_eventloop_lag_p90_seconds{pod=~"' + job + '.*"}',
         format: 'timeseries',
         legendFormat: '{{`{{`}}pod{{`}}`}}',
         datasource: datasource
@@ -12,10 +12,10 @@
       fieldConfig: {
         defaults: {
           custom: {
-            axisLabel: 'Usage',
+            axisLabel: 'Lag',
             fillOpacity: 10
           },
-          unit: 'percentunit'
+          unit: 's'
         }
       }
     }

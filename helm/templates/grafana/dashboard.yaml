@@ -6,6 +6,7 @@ metadata:
   labels:
     app: grafana
 spec:
+  customFolderName: {{ .Release.Namespace }}
   json: |-
     {{- include "dashboard.json" . | indent 4 }}
 # {{- end }}
