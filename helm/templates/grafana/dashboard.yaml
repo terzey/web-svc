@@ -1,0 +1,11 @@
+# {{ if .Values.mon.grafana.install }}
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: {{ include "name" . }}
+  labels:
+    app: grafana
+spec:
+  json: |-
+    {{- include "dashboard.json" . | indent 4 }}
+# {{- end }}

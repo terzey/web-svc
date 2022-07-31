@@ -1,6 +1,6 @@
 app:
   replicaCount: 1
-  image: terzey/web-svc:main-2022-07-26T08-22-38
+  image: terzey/web-svc:temp-2022-07-31T06-29-27
   service:
     port: 3000
   limits:
@@ -41,3 +41,6 @@ mon:
       groupInterval: 10s
       repeatInterval: 12h
       slackSecretAddress: aHR0cHM6Ly9ob29rcy5zbGFjay5jb20vc2VydmljZXMvVDAzUEtBM0JSTlovQjAzUURSSzVKRVQvMVRQb2VnVTN5RTk4SHNOWVlvWmhHeUtF
+  grafana:
+    install: true
+    datasourceUid: PBFA97CFB590B2093

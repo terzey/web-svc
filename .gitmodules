@@ -1,0 +1,4 @@
+[submodule "grafonnet-lib"]
+	path = grafonnet-lib
+	url = git@github.com:grafana/grafonnet-lib.git
+	branch = v0.1.0
