@@ -41,10 +41,10 @@ jobs:
 
       - name: Install Jsonnet
         run: |
-          apt install -y jsonnet
+          sudo apt install -y jsonnet
 
       - name: Build grafana dashboard
-        run: npm run  build-gd
+        run: npm run build-gd
 
       - id: semver
         name: Bump helm/Chart.yaml semver
