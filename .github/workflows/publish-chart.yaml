@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          submodules: true
 
       - name: Install jq
         run: |
@@ -36,6 +38,13 @@ jobs:
 
       - name: Add repo
         run: helm repo add "${REPOSITORY_NAME}" "${REPOSITORY_URL}"
+
+      - name: Install Jsonnet
+        run: |
+          apt install -y jsonnet
+
+      - name: Build grafana dashboard
+        run: npm run  build-gd
 
       - id: semver
         name: Bump helm/Chart.yaml semver
