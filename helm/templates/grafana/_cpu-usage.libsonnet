@@ -16,7 +16,7 @@ local graph = grafana.graphPanel;
       fieldConfig: {
         defaults: {
           custom: {
-            axisLabel: 'Usage, %',
+            axisLabel: 'Usage',
             fillOpacity: 10
           },
           unit: 'percentunit'

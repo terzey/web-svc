@@ -1,17 +1,13 @@
 # {{ $Name := include "name" . }}
 local grafana = import 'grafonnet/grafana.libsonnet';
 local dashboard = grafana.dashboard;
-local prometheus = grafana.prometheus;
-local table = grafana.tablePanel;
-local gauge = grafana.gaugePanel;
-local row = grafana.row;
-local transformation = grafana.transformation;
 local build = import '_build.jsonnet';
 local memoryLimits = import '_memory-limits.libsonnet';
 local cpuLimits = import '_cpu-limits.libsonnet';
 local memoryUsage = import '_memory-usage.libsonnet';
 local cpuUsage = import '_cpu-usage.libsonnet';
 local cpuCfsThrottled = import '_cpu-cfs-throttled.libsonnet';
+local httpRequestDuration = import '_http-request-duration.libsonnet';
 
 local job =  '{{ $Name }}';
 local component = '{{ .Chart.Name }}';
@@ -31,3 +27,4 @@ dashboard.new(
 .addPanel(memoryUsage.getPanel(job, component, datasource), gridPos = { x: 12, y: 8, w: 12, h: 8 })
 .addPanel(cpuUsage.getPanel(job, component, datasource), gridPos = { x: 0, y: 16, w: 12, h: 8 })
 .addPanel(cpuCfsThrottled.getPanel(job, component, datasource), gridPos = { x: 12, y: 16, w: 12, h: 8 })
+.addPanel(httpRequestDuration.getPanel(job, component, datasource), gridPos = { x: 0, y: 24, w: 12, h: 8 })

@@ -13,14 +13,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          submodules: true
+
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-      - name: install
+
+      - name: Install
         run: npm install
-      - name: lint
+
+      - name: Lint
         run: npm run lint
-      - name: test
+
+      - name: Test
         run: npm run test
-      - name: build
+
+      - name: Build
         run: npm run build
+
+      - name: Install jsonnet
+        run: |
+          sudo apt update
+          sudo apt install -y jsonnet
+
+      - name: Build grafana dashboard
+        run: npm run  build-gd
