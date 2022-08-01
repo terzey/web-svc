@@ -12,6 +12,11 @@ app:
 infra:
   imagePullSecrets:
     - regcred
+ingress:
+  install: true
+  className: nginx
+  path: /api/v1(/|$)(.*)
+  target: /api/$2
 mon:
   prometheus:
     install: true

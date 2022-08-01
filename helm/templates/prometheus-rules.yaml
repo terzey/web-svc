@@ -19,9 +19,9 @@ spec:
             severity: page
             app: {{ include "name" . }}
           annotations:
-            summary: Instance(s) of {{`{{`}} $labels.job {{`}}`}} high memory usage
+            summary: Instance(s) of {{`{{ $labels.job }}`}} high memory usage
             description: |-
-              Instance(s) of *{{`{{`}} $labels.job {{`}}`}}* has(ve) moderately high memory usage for more than {{ $Alerting.memoryUsage.periodSeconds }} seconds.
+              Instance(s) of *{{`{{ $labels.job }}`}}* has(ve) moderately high memory usage for more than {{ $Alerting.memoryUsage.periodSeconds }} seconds.
               Please contact development team to investigate service logs.
             instance: '{{`{{ $labels.instance }}`}}'
             pod: '{{`{{ $labels.pod }}`}}'
@@ -33,9 +33,9 @@ spec:
             severity: page
             app: {{ include "name" . }}
           annotations:
-            summary: Instance(s) of {{`{{`}} $labels.job {{`}}`}} high nodejs eventloop lag
+            summary: Instance(s) of {{`{{ $labels.job }}`}} high nodejs eventloop lag
             description: |-
-              Instance(s) of *{{`{{`}} $labels.job {{`}}`}}* has(ve) moderately high eventloop lag  for more than {{ $Alerting.eventloopLag.periodSeconds }} seconds.
+              Instance(s) of *{{`{{ $labels.job }}`}}* has(ve) moderately high eventloop lag  for more than {{ $Alerting.eventloopLag.periodSeconds }} seconds.
               Please contact DevOPS engineers to investigate container metrics.
             instance: '{{`{{ $labels.instance }}`}}'
             pod: '{{`{{ $labels.pod }}`}}'
@@ -47,9 +47,9 @@ spec:
             severity: page
             app: {{ include "name" . }}
           annotations:
-            summary: Instance(s) of {{`{{`}} $labels.job {{`}}`}} high process CPU usage
+            summary: Instance(s) of {{`{{ $labels.job }}`}} high process CPU usage
             description: |-
-              Instance(s) of *{{`{{`}} $labels.job {{`}}`}}* has(ve) moderately high CPU usage for more than {{ $Alerting.cpuUsage.periodSeconds }} seconds.
+              Instance(s) of *{{`{{ $labels.job }}`}}* has(ve) moderately high CPU usage for more than {{ $Alerting.cpuUsage.periodSeconds }} seconds.
               Please contact DevOPS engineers to investigate container metrics.
             instance: '{{`{{ $labels.instance }}`}}'
             pod: '{{`{{ $labels.pod }}`}}'
@@ -61,9 +61,9 @@ spec:
             severity: page
             app: {{ include "name" . }}
           annotations:
-            summary: Instance(s) of {{`{{`}} $labels.app {{`}}`}} ontainer CPU CFS throttled
+            summary: Instance(s) of {{`{{ $labels.job }}`}} container CPU CFS throttled
             description: |-
-              Instance(s) of *{{`{{`}} $labels.app {{`}}`}}* has(ve) moderately high container CPU CFS throttled for more than {{ $Alerting.cpuUsage.periodSeconds }} seconds.
+              Instance(s) of *{{`{{ $labels.job }}`}}* has(ve) moderately high container CPU CFS throttled for more than {{ $Alerting.cpuUsage.periodSeconds }} seconds.
               Please contact DevOPS engineers to investigate container metrics.
             instance: '{{`{{ $labels.instance }}`}}'
             pod: '{{`{{ $labels.pod }}`}}'
@@ -75,9 +75,9 @@ spec:
             severity: page
             app: {{ include "name" . }}
           annotations:
-            summary: Instance(s) of {{`{{`}} $labels.job {{`}}`}} http request duration
+            summary: Instance(s) of {{`{{ $labels.job }}`}} http request duration
             description: |-
-              Instance(s) of *{{`{{`}} $labels.job {{`}}`}}* has(ve) moderately high HTTP request duration for more than {{ $Alerting.httpRequestDuration.periodSeconds }} seconds.
+              Instance(s) of *{{`{{ $labels.job }}`}}* has(ve) moderately high HTTP request duration for more than {{ $Alerting.httpRequestDuration.periodSeconds }} seconds.
               Please contact development team to investigate service logs.
             instance: '{{`{{ $labels.instance }}`}}'
             pod: '{{`{{ $labels.pod }}`}}'

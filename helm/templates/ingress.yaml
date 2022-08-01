@@ -1,0 +1,20 @@
+{{ if .Values.ingress.install }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "name" . }}
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: {{ .Values.ingress.target }}
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  rules:
+  - http:
+      paths:
+      - path: {{ .Values.ingress.path }}
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "name" . }}
+            port:
+              number: {{ .Values.app.service.port }}
+{{- end }}
