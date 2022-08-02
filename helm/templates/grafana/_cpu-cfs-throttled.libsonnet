@@ -4,9 +4,9 @@
       title: 'CPU CFS Throttled',
       type: 'timeseries',
       targets: [{
-        expr: 'increase(container_cpu_cfs_throttled_periods_total{pod=~"' + job + '.*"}[120s]) / increase(container_cpu_cfs_periods_total{pod=~"' + job + '.*"}[120s])',
+        expr: 'max by(pod) increase(container_cpu_cfs_throttled_periods_total{pod=~"' + job + '.*"}[120s]) / max by(pod) increase(container_cpu_cfs_periods_total{pod=~"' + job + '.*"}[120s])',
         format: 'timeseries',
-        legendFormat: '{{`{{`}}pod{{`}}`}}',
+        legendFormat: '{{ `{{pod}}` }}',
         datasource: datasource
       }],
       fieldConfig: {

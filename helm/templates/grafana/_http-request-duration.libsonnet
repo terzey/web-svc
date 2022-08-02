@@ -6,7 +6,7 @@
       targets: [{
         expr: 'web_svc_http_request_duration_seconds{job="' + job + '", quantile=\"0.95\"}',
         format: 'timeseries',
-        legendFormat: '{{`{{`}}pod{{`}}`}}{{`{{`}}handler{{`}}`}}',
+        legendFormat: '{{ `{{pod}}{{handler}}` }}',
         datasource: datasource
       }],
       fieldConfig: {

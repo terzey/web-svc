@@ -14,7 +14,7 @@ local gauge = grafana.gaugePanel;
       prometheus.target(
         expr = 'web_svc_process_cpu_limit_seconds{job="' + job + '"}',
         format = 'table',
-        legendFormat='{{`{{`}}job{{`}}`}}',
+        legendFormat='{{ `{{job}} `}}',
         datasource = datasource
       )
     )

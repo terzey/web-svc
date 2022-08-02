@@ -6,7 +6,7 @@
       targets: [{
         expr: 'nodejs_eventloop_lag_p90_seconds{pod=~"' + job + '.*"}',
         format: 'timeseries',
-        legendFormat: '{{`{{`}}pod{{`}}`}}',
+        legendFormat: '{{ `{{pod}}` }}',
         datasource: datasource
       }],
       fieldConfig: {

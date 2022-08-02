@@ -6,7 +6,7 @@
       targets: [{
         expr: 'web_svc_memory_usage_ratio{job="' + job + '"}',
         format: 'timeseries',
-        legendFormat: '{{`{{`}}pod{{`}}`}}',
+        legendFormat: '{{ `{{pod}}` }}',
         datasource: datasource
       }],
       fieldConfig: {

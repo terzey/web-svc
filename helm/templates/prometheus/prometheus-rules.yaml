@@ -12,6 +12,7 @@ spec:
   groups:
     - name: {{ include "name" . }}
       rules:
+      
         - alert: WebSvcMemoryUsage
           expr: web_svc_memory_usage_ratio{job="{{ include "name" . }}"} > {{ $Alerting.memoryUsage.thresholdRatio }}
           for: {{ $Alerting.memoryUsage.periodSeconds }}s
@@ -19,12 +20,11 @@ spec:
             severity: page
             app: {{ include "name" . }}
           annotations:
-            summary: Instance(s) of {{`{{ $labels.job }}`}} high memory usage
+            summary: Instance(s) of {{ `{{ $labels.job }}` }} high memory usage
             description: |-
-              Instance(s) of *{{`{{ $labels.job }}`}}* has(ve) moderately high memory usage for more than {{ $Alerting.memoryUsage.periodSeconds }} seconds.
+              Instance(s) of *{{ `{{ $labels.job }}` }}* has(ve) moderately high memory usage for more than {{ $Alerting.memoryUsage.periodSeconds }} seconds.
               Please contact development team to investigate service logs.
-            instance: '{{`{{ $labels.instance }}`}}'
-            pod: '{{`{{ $labels.pod }}`}}'
+            {{- include "alert-rule-common-annotations" . | indent 12 }}
 
         - alert: WebSvcNodejsEventloopLag
           expr: nodejs_eventloop_lag_seconds{job="{{ include "name" . }}"} > {{ $Alerting.eventloopLag.thresholdSeconds }}
@@ -33,12 +33,11 @@ spec:
             severity: page
             app: {{ include "name" . }}
           annotations:
-            summary: Instance(s) of {{`{{ $labels.job }}`}} high nodejs eventloop lag
+            summary: Instance(s) of {{ `{{ $labels.job }}` }} high nodejs eventloop lag
             description: |-
-              Instance(s) of *{{`{{ $labels.job }}`}}* has(ve) moderately high eventloop lag  for more than {{ $Alerting.eventloopLag.periodSeconds }} seconds.
+              Instance(s) of *{{ `{{ $labels.job }}` }}* has(ve) moderately high eventloop lag  for more than {{ $Alerting.eventloopLag.periodSeconds }} seconds.
               Please contact DevOPS engineers to investigate container metrics.
-            instance: '{{`{{ $labels.instance }}`}}'
-            pod: '{{`{{ $labels.pod }}`}}'
+            {{- include "alert-rule-common-annotations" . | indent 12 }}
 
         - alert: WebSvcProcessCpuUsage
           expr: web_svc_process_cpu_usage_ratio{job="{{ include "name" . }}"} > {{ $Alerting.cpuUsage.thresholdRatio }}
@@ -47,26 +46,24 @@ spec:
             severity: page
             app: {{ include "name" . }}
           annotations:
-            summary: Instance(s) of {{`{{ $labels.job }}`}} high process CPU usage
+            summary: Instance(s) of {{ `{{ $labels.job }}` }} high process CPU usage
             description: |-
-              Instance(s) of *{{`{{ $labels.job }}`}}* has(ve) moderately high CPU usage for more than {{ $Alerting.cpuUsage.periodSeconds }} seconds.
+              Instance(s) of *{{ `{{ $labels.job }}` }}* has(ve) moderately high CPU usage for more than {{ $Alerting.cpuUsage.periodSeconds }} seconds.
               Please contact DevOPS engineers to investigate container metrics.
-            instance: '{{`{{ $labels.instance }}`}}'
-            pod: '{{`{{ $labels.pod }}`}}'
+            {{- include "alert-rule-common-annotations" . | indent 12 }}
 
         - alert: WebSvcCpuCfsThrottled
-          expr: increase(container_cpu_cfs_throttled_periods_total{pod=~"{{ include "name" . }}.*"}[{{ $Alerting.cpuCfsThrottled.periodSeconds }}s])/increase(container_cpu_cfs_periods_total{pod=~"{{ include "name" . }}.*"}[{{ $Alerting.cpuCfsThrottled.periodSeconds }}s]) > {{ $Alerting.cpuCfsThrottled.thresholdRatio }}
+          expr: max by(pod) increase(container_cpu_cfs_throttled_periods_total{pod=~"{{ include "name" . }}.*"}[{{ $Alerting.cpuCfsThrottled.periodSeconds }}s]) / max by(pod) increase(container_cpu_cfs_periods_total{pod=~"{{ include "name" . }}.*"}[{{ $Alerting.cpuCfsThrottled.periodSeconds }}s]) > {{ $Alerting.cpuCfsThrottled.thresholdRatio }}
           for: {{ $Alerting.cpuCfsThrottled.periodSeconds }}s
           labels:
             severity: page
             app: {{ include "name" . }}
           annotations:
-            summary: Instance(s) of {{`{{ $labels.job }}`}} container CPU CFS throttled
+            summary: Instance(s) of {{ `{{ $labels.job }}` }} container CPU CFS throttled
             description: |-
-              Instance(s) of *{{`{{ $labels.job }}`}}* has(ve) moderately high container CPU CFS throttled for more than {{ $Alerting.cpuUsage.periodSeconds }} seconds.
+              Instance(s) of *{{ `{{ $labels.job }}` }}* has(ve) moderately high container CPU CFS throttled for more than {{ $Alerting.cpuUsage.periodSeconds }} seconds.
               Please contact DevOPS engineers to investigate container metrics.
-            instance: '{{`{{ $labels.instance }}`}}'
-            pod: '{{`{{ $labels.pod }}`}}'
+            {{- include "alert-rule-common-annotations" . | indent 12 }}
 
         - alert: WebSvcHttpRequestDuration
           expr: web_svc_http_request_duration_seconds{job="{{ include "name" . }}",quantile="{{ $Alerting.httpRequestDuration.quantile }}"} > {{ $Alerting.httpRequestDuration.thresholdSeconds }}
@@ -75,12 +72,11 @@ spec:
             severity: page
             app: {{ include "name" . }}
           annotations:
-            summary: Instance(s) of {{`{{ $labels.job }}`}} http request duration
+            summary: Instance(s) of {{ `{{ $labels.job }}` }} http request duration
             description: |-
-              Instance(s) of *{{`{{ $labels.job }}`}}* has(ve) moderately high HTTP request duration for more than {{ $Alerting.httpRequestDuration.periodSeconds }} seconds.
+              Instance(s) of *{{ `{{ $labels.job }}` }}* has(ve) moderately high HTTP request duration for more than {{ $Alerting.httpRequestDuration.periodSeconds }} seconds.
               Please contact development team to investigate service logs.
-            instance: '{{`{{ $labels.instance }}`}}'
-            pod: '{{`{{ $labels.pod }}`}}'
+            {{- include "alert-rule-common-annotations" . | indent 12 }}
 
         - alert: WebSvcWachdog
           expr: web_svc_watchdog{job="{{ include "name" . }}"} == 1
@@ -89,7 +85,7 @@ spec:
             severity: page
             app: {{ include "name" . }}
           annotations:
-            summary: Watchdog set on {{`{{ $labels.job }}`}}
+            summary: Watchdog set on {{ `{{ $labels.job }}` }}
             description: |-
               This is an alert meant to ensure that the entire alerting pipeline is functional.
               To clear the alert send HTTP request:
@@ -97,6 +93,6 @@ spec:
               To set the alert send HTTP request:
               ```curl -X POST http://<contaiter-ip>:<container-port>/self/metrics -H "Content-Type: text/plain" -d "web_svc_watchdog 1"```
               Affected pod(s) is(are) listed below.
-            instance: '{{`{{ $labels.instance }}`}}'
-            pod: '{{`{{ $labels.pod }}`}}'
+            {{- include "alert-rule-common-annotations" . | indent 12 }}
+
 {{- end }}

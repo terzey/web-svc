@@ -4,7 +4,9 @@ metadata:
   name: {{ include "name" . }}
   namespace: {{ .Release.Namespace }}
 spec:
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.app.replicaCount }}
+  {{- end }}
   selector:
     matchLabels:
       app: {{ include "name" . }}
