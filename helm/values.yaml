@@ -17,6 +17,12 @@ ingress:
   className: nginx
   path: /api/v1(/|$)(.*)
   target: /api/$2
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 95
 mon:
   prometheus:
     install: true
