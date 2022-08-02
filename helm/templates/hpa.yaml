@@ -27,4 +27,21 @@ spec:
           type: Utilization
           averageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
     {{- end }}
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: {{ .Values.autoscaling.scaleDown.stabilizationWindowSeconds }}
+      policies:
+        - type: Percent
+          value: {{ .Values.autoscaling.scaleDown.percentage }}
+          periodSeconds: {{ .Values.autoscaling.scaleDown.periodSeconds }}
+    scaleUp:
+      stabilizationWindowSeconds: {{ .Values.autoscaling.scaleUp.stabilizationWindowSeconds }}
+      policies:
+        - type: Percent
+          value: {{ .Values.autoscaling.scaleUp.percentage }}
+          periodSeconds:  {{ .Values.autoscaling.scaleUp.periodSeconds }}
+        - type: Pods
+          value: {{ .Values.autoscaling.scaleUp.pods }}
+          periodSeconds:  {{ .Values.autoscaling.scaleUp.periodSeconds }}
+      selectPolicy: Max
 {{- end }}

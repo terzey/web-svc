@@ -14,7 +14,7 @@ local gauge = grafana.gaugePanel;
       prometheus.target(
         expr = 'web_svc_memory_limit_bytes{job="' + job + '"}',
         format = 'table',
-        legendFormat='{{`{{`}}job{{`}}`}}',
+        legendFormat='{{ `{{job}}` }}',
         datasource = datasource
       )
     )

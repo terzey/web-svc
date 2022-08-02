@@ -4,7 +4,7 @@ app:
   service:
     port: 3000
   limits:
-    memory: 100Mi
+    memory: 200Mi
     cpu: 200m
   check:
     readiness:
@@ -21,17 +21,26 @@ autoscaling:
   enabled: true
   minReplicas: 1
   maxReplicas: 10
-  targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 95
+  targetCPUUtilizationPercentage: 60
+  targetMemoryUtilizationPercentage: 75
+  scaleDown:
+    stabilizationWindowSeconds: 300
+    percentage: 100
+    periodSeconds: 15
+  scaleUp:
+    stabilizationWindowSeconds: 0
+    percentage: 50
+    pods: 2
+    periodSeconds: 15
 mon:
   prometheus:
     install: true
     alerting:
       memoryUsage:
-        thresholdRatio: 0.8
+        thresholdRatio: 0.85
         periodSeconds: 120
       cpuUsage:
-        thresholdRatio: 0.9
+        thresholdRatio: 0.85
         periodSeconds: 120
       eventloopLag:
         thresholdSeconds: 0.1
