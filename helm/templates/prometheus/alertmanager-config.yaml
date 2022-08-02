@@ -36,9 +36,9 @@ spec:
             {{ `{{ (index .Alerts 0).Annotations.description}}` }}
 
             *Pod(s):*
-            {{`{{- range .Alerts }}`}}
-            {{`*{{ .Annotations.pod }}/{{ .Annotations.instance }}* fired {{ .StartsAt.UTC.Format "02-Jan-2006 15:04:05" }} {{ if eq .Status "resolved" }} resolved {{ .EndsAt.UTC.Format "02-Jan-2006 15:04:05" }} duration {{ .EndsAt.Sub .StartsAt }} {{ end }}`}}
-            {{`{{- end }}`}}
+            {{ `{{- range .Alerts }}` }}
+            {{ `*{{ .Annotations.pod }}/{{ .Annotations.instance }}* value "{{ .Annotations.value }}" fired {{ .StartsAt.UTC.Format "02-Jan-2006 15:04:05" }} {{ if eq .Status "resolved" }} resolved {{ .EndsAt.UTC.Format "02-Jan-2006 15:04:05" }} duration {{ .EndsAt.Sub .StartsAt }} {{ end }}` }}
+            {{ `{{- end }}` }}
           sendResolved: true
 ---
 apiVersion: v1
