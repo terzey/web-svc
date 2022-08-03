@@ -7,16 +7,16 @@
         expr: 'nodejs_eventloop_lag_p90_seconds{pod=~"' + job + '.*"}',
         format: 'timeseries',
         legendFormat: '{{ `{{pod}}` }}',
-        datasource: datasource
+        datasource: datasource,
       }],
       fieldConfig: {
         defaults: {
           custom: {
             axisLabel: 'Lag',
-            fillOpacity: 10
+            fillOpacity: 10,
           },
-          unit: 's'
-        }
-      }
-    }
+          unit: 's',
+        },
+      },
+    },
 }
