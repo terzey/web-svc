@@ -1,18 +1,18 @@
-// {{ $Name := include "name" . }}
-local build = import '_build.jsonnet';
-local cpuCfsThrottled = import '_cpu-cfs-throttled.libsonnet';
-local cpuLimits = import '_cpu-limits.libsonnet';
-local cpuUsage = import '_cpu-usage.libsonnet';
-local httpRequestDuration = import '_http-request-duration.libsonnet';
-local memoryLimits = import '_memory-limits.libsonnet';
-local memoryUsage = import '_memory-usage.libsonnet';
-local nodejsEventloopLag = import '_nodejs-eventloop-lag.libsonnet';
+local build = import 'build.jsonnet';
+local cpuCfsThrottled = import 'cpu-cfs-throttled.libsonnet';
+local cpuLimits = import 'cpu-limits.libsonnet';
+local cpuUsage = import 'cpu-usage.libsonnet';
+local httpRequestDuration = import 'http-request-duration.libsonnet';
+local memoryLimits = import 'memory-limits.libsonnet';
+local memoryUsage = import 'memory-usage.libsonnet';
+local nodejsEventloopLag = import 'nodejs-eventloop-lag.libsonnet';
+local httpRequestRate2xx = import 'http-request-rate-2xx.libsonnet';
+local httpRequestRate5xx = import 'http-request-rate-5xx.libsonnet';
 
-local job = '{{ $Name }}';
-local component = '{{ .Chart.Name }}';
+local job = '{{ .name }}';
+local component = '{{ .component }}';
 local datasource = {
-  type: 'Prometheus',
-  uid: '{{ .Values.mon.grafana.datasourceUid }}',
+  type: '{{ .datasourceType }}',
 };
 local timepicker = {
   refresh_intervals: [
@@ -70,6 +70,10 @@ local timepicker = {
     nodejsEventloopLag.getPanel(job, component, datasource) + { gridPos: { x: 12, y: 20, w: 12, h: 8 } },
 
     // row 5, y: 28
+    httpRequestRate2xx.getPanel(job, component, datasource) + { gridPos: { x: 0, y: 28, w: 12, h: 8 } },
+    httpRequestRate5xx.getPanel(job, component, datasource) + { gridPos: { x: 12, y: 28, w: 12, h: 8 } },
+
+    // row 5, y: 36
     // xyz.getPanel(..., ...)
   ],
 }

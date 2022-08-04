@@ -7,6 +7,7 @@ metadata:
     app: grafana
 spec:
   customFolderName: {{ .Release.Namespace }}
+  {{ $context := dict "name" (include "name" . ) "component" .Chart.Name "datasourceType" .Values.mon.grafana.datasourceType  }}
   json: |-
-    {{- include "dashboard.json" . | indent 4 }}
+    {{- include "dashboard.json" $context | indent 4 }}
 # {{- end }}
