@@ -36,5 +36,5 @@ lerna-debug.log*
 
 
 bin/.env.sh
-helm/templates/grafana/_dashboard.json.tpl
+helm/templates/mon/_dashboard.json.tpl
 build

@@ -53,7 +53,7 @@ spec:
             {{- include "alert-rule-common-annotations" . | indent 12 }}
 
         - alert: WebSvcCpuCfsThrottled
-          expr: max by(pod) increase(container_cpu_cfs_throttled_periods_total{pod=~"{{ include "name" . }}.*"}[{{ $Alerting.cpuCfsThrottled.periodSeconds }}s]) / max by(pod) increase(container_cpu_cfs_periods_total{pod=~"{{ include "name" . }}.*"}[{{ $Alerting.cpuCfsThrottled.periodSeconds }}s]) > {{ $Alerting.cpuCfsThrottled.thresholdRatio }}
+          expr: increase(container_cpu_cfs_throttled_periods_total{pod=~"{{ include "name" . }}.*"}[{{ $Alerting.cpuCfsThrottled.periodSeconds }}s]) / increase(container_cpu_cfs_periods_total{pod=~"{{ include "name" . }}.*"}[{{ $Alerting.cpuCfsThrottled.periodSeconds }}s]) > {{ $Alerting.cpuCfsThrottled.thresholdRatio }}
           for: {{ $Alerting.cpuCfsThrottled.periodSeconds }}s
           labels:
             severity: page

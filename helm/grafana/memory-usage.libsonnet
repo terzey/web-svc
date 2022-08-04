@@ -7,16 +7,16 @@
         expr: 'web_svc_memory_usage_ratio{job="' + job + '"}',
         format: 'timeseries',
         legendFormat: '{{ `{{pod}}` }}',
-        datasource: datasource
+        datasource: datasource,
       }],
       fieldConfig: {
         defaults: {
           custom: {
             axisLabel: 'Usage',
-            fillOpacity: 10
+            fillOpacity: 10,
           },
-          unit: 'percentunit'
-        }
-      }
-    }
+          unit: 'percentunit',
+        },
+      },
+    },
 }

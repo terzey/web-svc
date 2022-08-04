@@ -1,7 +1,3 @@
-## Git Clone
-```shell
-git clone git@github.com:terzey/web-svc.git --recurse-submodules 
-```
 ## Helm
 [Helm s3](https://github.com/hypnoglow/helm-s3) plugin is used.
 ## Helm
