@@ -1,6 +1,6 @@
 app:
   replicaCount: 1
-  image: terzey/web-svc:main-2022-08-04T07-45-23
+  image: terzey/web-svc:main-2022-08-05T09-26-00
   service:
     port: 3000
   limits:
