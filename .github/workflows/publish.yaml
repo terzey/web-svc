@@ -99,3 +99,4 @@ jobs:
         name: Merge pull-request
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+          MERGE_LABELS: ""
