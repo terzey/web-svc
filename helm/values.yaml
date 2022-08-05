@@ -14,7 +14,7 @@ infra:
     - regcred
 ingress:
   install: true
-  className: nginx
+  className: nginx-ingress
   path: /api/v1(/|$)(.*)
   target: /api/$2
 autoscaling:
