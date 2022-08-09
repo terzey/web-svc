@@ -1,6 +1,6 @@
 app:
   replicaCount: 1
-  image: terzey/web-svc:main-2022-08-05T09-26-00
+  image: terzey/web-svc:main-2022-08-09T15-12-18
   service:
     port: 3000
   limits:
@@ -83,8 +83,8 @@ canary:
     # Prometheus checks
     metrics:
       httpRequestSuccessRate:
-      # minimum req success rate (non 5xx responses)
-      # percentage (0-100)
+        # minimum req success rate (non 5xx responses)
+        # percentage (0-100)
         thresholdRange:
           min: 99
         interval: 1m
