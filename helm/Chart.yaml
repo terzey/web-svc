@@ -4,3 +4,4 @@ description: A Helm chart for web-svc
 type: application
 version: 0.1.36
 appVersion: "0.1.23"
+icon: https://github.com/terzey/web-svc/raw/main/helm/image.png
