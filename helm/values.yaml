@@ -64,3 +64,27 @@ mon:
   grafana:
     install: true
     datasourceType: Prometheus
+canary:
+  enabled: true
+  # the maximum time in seconds for the canary deployment
+  # to make progress before it is rollback (default 600s)
+  progressDeadlineSeconds: 60
+  analysis:
+    # schedule interval (default 60s)
+    interval: 10s
+    # max number of failed metric checks before rollback
+    threshold: 10
+    # max traffic percentage routed to canary
+    # percentage (0-100)
+    maxWeight: 50
+    # canary increment step
+    # percentage (0-100)
+    stepWeight: 5
+    # Prometheus checks
+    metrics:
+      WebSvcRequestSuccessRate:
+      # minimum req success rate (non 5xx responses)
+      # percentage (0-100)
+        thresholdRange:
+          min: 99
+        interval: 1m

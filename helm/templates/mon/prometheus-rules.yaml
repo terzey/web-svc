@@ -95,4 +95,14 @@ spec:
               Affected pod(s) is(are) listed below.
             {{- include "alert-rule-common-annotations" . | indent 12 }}
 
+        - expr: >-
+            (sum (rate(web_svc_http_request_count_total{job="default-web-svc", status_code=~'2\\d\\d'}[120s]))) 
+            / (
+            (sum (rate(web_svc_http_request_count_total{job="default-web-svc", status_code=~'2\\d\\d'}[120s])))
+            + (sum by (pod) (rate(web_svc_http_request_count_total{job="default-web-svc", status_code=~'5\\d\\d'}[120s])) 
+            or vector(0))
+            )
+          record: WebSvcRequestSuccessRate
+
+
 {{- end }}

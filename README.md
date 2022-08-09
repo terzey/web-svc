@@ -24,20 +24,6 @@ Update
 helm upgrade app ./helm
 ```
 
-## Grafana 
-```shell
-brew install jsonnet-bundler
-```
-```shell
-jb init
-jb install https://github.com/grafana/grafonnet-lib/grafonnet
-```
-
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
 ## Installation
 
 ```bash
