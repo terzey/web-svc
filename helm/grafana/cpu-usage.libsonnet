@@ -1,13 +1,13 @@
 {
-  getPanel(job, component, datasource)::
+  getPanel(ctx)::
     {
       title: 'CPU Usage',
       type: 'timeseries',
       targets: [{
-        expr: 'web_svc_process_cpu_usage_ratio{job="' + job + '"}',
+        expr: 'web_svc_process_cpu_usage_ratio{job="' + ctx.job + '"}',
         format: 'timeseries',
         legendFormat: '{{ `{{pod}} `}}',
-        datasource: datasource,
+        datasource: ctx.datasource,
       }],
       fieldConfig: {
         defaults: {

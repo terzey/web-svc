@@ -3,17 +3,22 @@ local cpuCfsThrottled = import 'cpu-cfs-throttled.libsonnet';
 local cpuLimits = import 'cpu-limits.libsonnet';
 local cpuUsage = import 'cpu-usage.libsonnet';
 local httpRequestDuration = import 'http-request-duration.libsonnet';
+local httpRequestRate2xx = import 'http-request-rate-2xx.libsonnet';
+local httpRequestRate5xx = import 'http-request-rate-5xx.libsonnet';
+local httpRequestSuccessRate = import 'http-request-success-rate.libsonnet';
 local memoryLimits = import 'memory-limits.libsonnet';
 local memoryUsage = import 'memory-usage.libsonnet';
 local nodejsEventloopLag = import 'nodejs-eventloop-lag.libsonnet';
-local httpRequestRate2xx = import 'http-request-rate-2xx.libsonnet';
-local httpRequestRate5xx = import 'http-request-rate-5xx.libsonnet';
 
-local job = '{{ .name }}';
-local component = '{{ .component }}';
-local datasource = {
-  type: '{{ .datasourceType }}',
+local ctx = {
+  job: '{{ .name }}',
+  component: '{{ .component }}',
+  datasource: {
+    type: '{{ .datasourceType }}',
+  },
+  httpSuccessRateMetric: '{{ .httpSuccessRateMetric }}',
 };
+
 local timepicker = {
   refresh_intervals: [
     '5s',
@@ -41,10 +46,10 @@ local timepicker = {
 };
 
 {
-  title: job,
+  title: ctx.job,
   editable: true,
   style: 'dark',
-  tags: [component, job],
+  tags: [ctx.component, ctx.job],
   time_from: 'now-15m',
   time_to: 'now',
   timezone: 'browser',
@@ -54,26 +59,29 @@ local timepicker = {
   schemaVersion: 14,
   panels: [
     // row 1, y: 0
-    build.getPanel(job, component, datasource) + { gridPos: { x: 0, y: 0, w: 24, h: 4 } },
+    build.getPanel(ctx) + { gridPos: { x: 0, y: 0, w: 24, h: 4 } },
 
     // row 2, y: 4
-    memoryLimits.getPanel(job, component, datasource) + { gridPos: { x: 0, y: 4, w: 6, h: 8 } },
-    cpuLimits.getPanel(job, component, datasource) + { gridPos: { x: 6, y: 4, w: 6, h: 8 } },
-    memoryUsage.getPanel(job, component, datasource) + { gridPos: { x: 12, y: 4, w: 12, h: 8 } },
+    memoryLimits.getPanel(ctx) + { gridPos: { x: 0, y: 4, w: 6, h: 8 } },
+    cpuLimits.getPanel(ctx) + { gridPos: { x: 6, y: 4, w: 6, h: 8 } },
+    memoryUsage.getPanel(ctx) + { gridPos: { x: 12, y: 4, w: 12, h: 8 } },
 
     // row 3, y: 12
-    cpuUsage.getPanel(job, component, datasource) + { gridPos: { x: 0, y: 12, w: 12, h: 8 } },
-    cpuCfsThrottled.getPanel(job, component, datasource) + { gridPos: { x: 12, y: 12, w: 12, h: 8 } },
+    cpuUsage.getPanel(ctx) + { gridPos: { x: 0, y: 12, w: 12, h: 8 } },
+    cpuCfsThrottled.getPanel(ctx) + { gridPos: { x: 12, y: 12, w: 12, h: 8 } },
 
     // row 4, y: 20
-    httpRequestDuration.getPanel(job, component, datasource) + { gridPos: { x: 0, y: 20, w: 12, h: 8 } },
-    nodejsEventloopLag.getPanel(job, component, datasource) + { gridPos: { x: 12, y: 20, w: 12, h: 8 } },
+    httpRequestDuration.getPanel(ctx) + { gridPos: { x: 0, y: 20, w: 12, h: 8 } },
+    nodejsEventloopLag.getPanel(ctx) + { gridPos: { x: 12, y: 20, w: 12, h: 8 } },
 
     // row 5, y: 28
-    httpRequestRate2xx.getPanel(job, component, datasource) + { gridPos: { x: 0, y: 28, w: 12, h: 8 } },
-    httpRequestRate5xx.getPanel(job, component, datasource) + { gridPos: { x: 12, y: 28, w: 12, h: 8 } },
+    httpRequestRate2xx.getPanel(ctx) + { gridPos: { x: 0, y: 28, w: 12, h: 8 } },
+    httpRequestRate5xx.getPanel(ctx) + { gridPos: { x: 12, y: 28, w: 12, h: 8 } },
 
     // row 5, y: 36
+    httpRequestSuccessRate.getPanel(ctx) + { gridPos: { x: 0, y: 36, w: 12, h: 8 } },
+
+    // row 6, y: 44
     // xyz.getPanel(..., ...)
   ],
 }

@@ -1,18 +1,18 @@
 {
-  getPanel(job, component, datasource)::
+  getPanel(ctx)::
     {
       title: '5xx Http Request Rate, rps',
       type: 'timeseries',
       targets: [{
-        expr: 'sum by(pod) (rate(web_svc_http_request_count_total{job="' + job + '", status_code=~\"5\\\\d\\\\d\"}[120s]))',
+        expr: 'sum by(pod) (rate(web_svc_http_request_count_total{job="' + ctx.job + '", status_code=~\"5\\\\d\\\\d\"}[120s]))',
         format: 'timeseries',
         legendFormat: '{{ `{{pod}} `}}',
-        datasource: datasource,
+        datasource: ctx.datasource,
       }],
       fieldConfig: {
         defaults: {
           custom: {
-            axisLabel: 'rps',
+            axisLabel: 'RPS',
             fillOpacity: 10,
           },
           unit: 'reqps',

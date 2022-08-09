@@ -7,7 +7,12 @@ metadata:
     app: grafana
 spec:
   customFolderName: {{ .Release.Namespace }}
-  {{ $context := dict "name" (include "name" . ) "component" .Chart.Name "datasourceType" .Values.mon.grafana.datasourceType  }}
+  {{ $context := dict 
+    "name" (include "name" . ) 
+    "component" .Chart.Name 
+    "datasourceType" .Values.mon.grafana.datasourceType 
+    "httpSuccessRateMetric" (include "CanaryAnalysisHttpSuccessRateMetricName" . ) 
+  -}}
   json: |-
     {{- include "dashboard.json" $context | indent 4 }}
 # {{- end }}

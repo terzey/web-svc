@@ -102,7 +102,5 @@ spec:
             + (sum by (pod) (rate(web_svc_http_request_count_total{job="default-web-svc", status_code=~'5\\d\\d'}[120s])) 
             or vector(0))
             )
-          record: WebSvcRequestSuccessRate
-
-
+          record: {{ include "CanaryAnalysisHttpSuccessRateMetricName" . }}
 {{- end }}

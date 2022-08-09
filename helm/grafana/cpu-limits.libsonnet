@@ -1,16 +1,16 @@
 {
-  getPanel(job, component, datasource)::
+  getPanel(ctx)::
     {
       type: 'gauge',
       title: 'CPU Limits',
-      datasource: datasource,
+      datasource: ctx.datasource,
       reducerFunction: 'min',
       unit: 's',
       targets: [{
-        expr: 'web_svc_process_cpu_limit_seconds{job="' + job + '"}',
+        expr: 'web_svc_process_cpu_limit_seconds{job="' + ctx.job + '"}',
         format: 'table',
         legendFormat: '{{ `{{job}} `}}',
-        datasource: datasource,
+        datasource: ctx.datasource,
       }],
       fieldConfig: {
         defaults: {
