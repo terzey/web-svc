@@ -1,13 +1,13 @@
 {
-  getPanel(job, component, datasource)::
+  getPanel(ctx)::
     {
       type: 'table',
       title: 'Build',
-      datasource: datasource,
+      datasource: ctx.datasource,
       targets: [{
-        expr: 'web_svc_build{job="' + job + '"}',
+        expr: 'web_svc_build{job="' + ctx.job + '"}',
         format: 'table',
-        datasource: datasource,
+        datasource: ctx.datasource,
       }],
       transformations: [{
         id: 'filterFieldsByName',

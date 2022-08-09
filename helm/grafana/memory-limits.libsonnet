@@ -1,16 +1,16 @@
 {
-  getPanel(job, component, datasource)::
+  getPanel(ctx)::
     {
       type: 'gauge',
       title: 'Memory Limits',
-      datasource: datasource,
+      datasource: ctx.datasource,
       reducerFunction: 'min',
       unit: 'bytes',
       targets: [{
-        expr: 'web_svc_memory_limit_bytes{job="' + job + '"}',
+        expr: 'web_svc_memory_limit_bytes{job="' + ctx.job + '"}',
         format: 'table',
         legendFormat: '{{ `{{job}}` }}',
-        datasource: datasource,
+        datasource: ctx.datasource,
       }],
       fieldConfig: {
         defaults: {

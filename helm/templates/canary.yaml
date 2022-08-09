@@ -6,17 +6,14 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   provider: nginx
-  # deployment reference
   targetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "name" . }}
-  # ingress reference
   ingressRef:
     apiVersion: networking.k8s.io/v1
     kind: Ingress
     name: {{ include "name" . }}
-  # HPA reference (optional)
   autoscalerRef:
     apiVersion: autoscaling/v2
     kind: HorizontalPodAutoscaler
@@ -31,10 +28,8 @@ spec:
     maxWeight: {{ .Values.canary.analysis.maxWeight }}
     stepWeight: {{ .Values.canary.analysis.stepWeight }}
     metrics:
-    - name: WebSvcRequestSuccessRate
-      # minimum req success rate (non 5xx responses)
-      # percentage (0-100)
+    - name:  {{ include "CanaryAnalysisHttpSuccessRateMetricName" . }}
       thresholdRange:
-        min: {{ .Values.canary.analysis.metrics.WebSvcRequestSuccessRate.thresholdRange.min }}
-      interval: {{ .Values.canary.analysis.metrics.WebSvcRequestSuccessRate.interval }}
+        min: {{ .Values.canary.analysis.metrics.httpRequestSuccessRate.thresholdRange.min }}
+      interval: {{ .Values.canary.analysis.metrics.httpRequestSuccessRate.interval }}
 {{- end }}

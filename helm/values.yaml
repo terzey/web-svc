@@ -82,7 +82,7 @@ canary:
     stepWeight: 5
     # Prometheus checks
     metrics:
-      WebSvcRequestSuccessRate:
+      httpRequestSuccessRate:
       # minimum req success rate (non 5xx responses)
       # percentage (0-100)
         thresholdRange:
