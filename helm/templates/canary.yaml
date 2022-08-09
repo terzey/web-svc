@@ -4,6 +4,8 @@ kind: Canary
 metadata:
   name: {{ include "name" . }}
   namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ include "name" . }}
 spec:
   provider: nginx
   targetRef:

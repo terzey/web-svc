@@ -8,10 +8,6 @@ pod: '{{ `{{ $labels.pod }}` }}'
 value: '{{ `{{ $value }}` }}'
 {{- end }}
 
-{{- define "alertPrefix" -}}
-{{- printf "%s-%s" .Release.Name .Chart.Name | camelcase | trunc 63 }}
-{{- end }}
-
 {{- define "CanaryAnalysisHttpSuccessRateMetricName" -}}
 {{- printf "%s-%s-http-request-success-rate" .Release.Name .Chart.Name | camelcase | trunc 63 }}
 {{- end }}

@@ -1,8 +1,8 @@
-{{ $Name := printf "%s-%s" .Release.Name .Chart.Name }}
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ $Name }}-test"
+  name: "{{ include "name" . }}-test"
+  namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook": test
 spec:
@@ -10,5 +10,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ $Name }}:{{ .Values.app.service.port }}/self/version']
+      args: ['{{ include "name" . }}:{{ .Values.app.service.port }}/self/version']
   restartPolicy: Never
