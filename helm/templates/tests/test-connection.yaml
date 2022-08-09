@@ -9,6 +9,12 @@ spec:
   containers:
     - name: wget
       image: busybox
-      command: ['wget']
-      args: ['{{ include "name" . }}:{{ .Values.app.service.port }}/self/version']
+      command: 
+        - sh
+      args: 
+        - -c
+        - >-
+          wget {{ include "name" . }}:{{ .Values.app.service.port }}/self/version ||
+          wget {{ include "name" . }}-canary:{{ .Values.app.service.port }}/self/version ||
+          wget {{ include "name" . }}-primary:{{ .Values.app.service.port }}/self/version
   restartPolicy: Never
