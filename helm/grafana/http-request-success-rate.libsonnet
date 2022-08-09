@@ -6,13 +6,13 @@
       targets: [{
         expr: ctx.httpSuccessRateMetric,
         format: 'timeseries',
-        legendFormat: '{{ `{{pod}}` }}',
+        legendFormat: ctx.name,
         datasource: ctx.datasource,
       }],
       fieldConfig: {
         defaults: {
           custom: {
-            axisLabel: 'Rate',
+            axisLabel: 'Success',
             fillOpacity: 10,
           },
           unit: 'percentunit',
