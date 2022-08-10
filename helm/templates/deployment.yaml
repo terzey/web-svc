@@ -20,7 +20,7 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           imagePullPolicy: IfNotPresent
-          image: {{ .Values.app.image }}
+          image: {{ .Values.app.image.registry }}/{{ .Values.app.image.name }}:{{ .Values.app.image.tag }}
           resources:
             requests:
               memory: {{ .Values.app.limits.memory }}
