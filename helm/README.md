@@ -23,8 +23,8 @@ To uninstall/delete the `my-release` deployment:
 
 ### Common
 
-| Name                      | Description                                                                                       | Value               |
-| ------------------------- | ------------------------------------------------------------------------------------------------- | ------------------- |
+| Name                                         | Description                                                                    | Value               |
+| -------------------------------------------- | ------------------------------------------------------------------------------ | ------------------- |
 | `app.replicaCount`                           | Number of replicas to deploy. not used if `autoscaling. enabled` set to `true` | `1`                 |
 | `app.image.registry`                         | web-svc image registry                                                         |  `docker.io`        |
 | `app.image.name`                             | web-svc image name                                                             |  `terzey/web-svc`   |
@@ -43,8 +43,8 @@ To uninstall/delete the `my-release` deployment:
 
 ### Autoscaling
 
-| Name                      | Description                                                                                               | Value  |
-| ------------------------- | --------------------------------------------------------------------------------------------------------- -------- |
+| Name                                               | Description                                                                      | Value  |
+| -------------------------------------------------- | -------------------------------------------------------------------------------- | ------ |
 | `autoscaling.enabled`                              | Whether enable horizontal pod autoscale                                          | `true` |
 | `autoscaling.minReplicas`                          | Configure a minimum amount of pods                                               |  `1`   |
 | `autoscaling.imaxReplicas`                         | Configure a maximum amount of pods                                               |  `10`  |
