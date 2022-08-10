@@ -36,7 +36,7 @@ To uninstall/delete the `my-release` deployment:
 | `infra.imagePullSecrets`                     | Docker registry secret names as an array                                       |  `["regcred"]`      |
 | `ingress.install`                            | Enable ingress record generation for web-svc                                   |  `true`             |
 | `ingress.className`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)  |  `nginx-ingress`    |
-| `ingress.path`                               | Default path for the ingress record                                            |  `/api/v1(/|$)(.*)` |
+| `ingress.path`                               | Default path for the ingress record                                            |  `/api/v1(/\|$)(.*)` |
 | `ingress.target`                             | Target path for the ingress record                                             |  `/api/$2`          |
 
 > **Tip**: For more information please refer to [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) and [Resource Management for Pods and Containers](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
