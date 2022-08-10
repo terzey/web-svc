@@ -5,7 +5,7 @@ metadata:
 spec:
   containers:
     - name: busybox
-      image: busybox:1.28
+      image: {{ .Values.app.image.registry }}/busybox:1.28
       args:
         - sleep
         - "1000000"

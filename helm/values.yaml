@@ -1,6 +1,9 @@
 app:
   replicaCount: 1
-  image: terzey/web-svc:main-2022-08-09T18-24-17
+  image: 
+    registry: docker.io
+    name: terzey/web-svc
+    tag: main-2022-08-09T18-24-17
   service:
     port: 3000
   limits:
