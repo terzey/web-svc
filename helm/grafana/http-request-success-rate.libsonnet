@@ -6,7 +6,7 @@
       targets: [{
         expr: ctx.httpSuccessRateMetric,
         format: 'timeseries',
-        legendFormat: ctx.name,
+        legendFormat: '{{ `{{pod}} `}}',
         datasource: ctx.datasource,
       }],
       fieldConfig: {
