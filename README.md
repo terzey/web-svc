@@ -65,4 +65,3 @@ package.json
 ```shell
 npx npm-force-resolutions 
 ```
-
